@@ -1,3 +1,10 @@
+"""Phân tích nghiệp vụ: audit dữ liệu synthetic, kiểm định giả thiết, customer
+behavior, dự báo nhu cầu/staffing, recommendation và kiểm định xu hướng.
+
+Phục vụ notebook 05. Lưu ý: dữ liệu là synthetic nên kết quả forecast/trend là
+**minh hoạ phương pháp**, không phải kết luận kinh doanh. Thuật ngữ (MAPE,
+seasonal-naive, Mann-Kendall, Cramér's V…) xem `docs/GLOSSARY.md`.
+"""
 import json
 import math
 import re

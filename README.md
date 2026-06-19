@@ -1,5 +1,8 @@
 # Pizza Delivery Decision Support System
 
+> 👉 **Mới vào / trái ngành?** Đọc [`START_HERE.md`](START_HERE.md) trước — kể
+> dự án bằng lời thường, chỉ thứ tự đọc và cách hiểu các con số.
+
 Dự án con này được tạo song song với dự án CrisisMMD hiện tại. Mục tiêu là giữ
 quy trình học thuật đầy đủ của môn Hệ hỗ trợ quyết định nhưng giảm phạm vi về
 một bài toán tabular nhỏ: dự báo và ưu tiên đơn giao pizza có nguy cơ trễ.
@@ -39,7 +42,7 @@ data/raw/Enhanced_pizza_sell_data_2024-25.xlsx
 Nếu cần tải lại:
 
 ```powershell
-cd pizza_delivery_dss
+cd dss-g29-pizza
 python -m scripts.download_data
 ```
 
@@ -63,7 +66,7 @@ tạo kết quả ảo.
 ## Quy trình tái lập
 
 ```powershell
-cd pizza_delivery_dss
+cd dss-g29-pizza
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m scripts.run_all
@@ -124,6 +127,10 @@ tests/                Kiểm thử pipeline
 |---|---|
 | Checklist nộp bài | [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) |
 | Hướng dẫn đọc hiểu/trình bày | [docs/WORKFLOW_PRESENTATION_GUIDE.md](docs/WORKFLOW_PRESENTATION_GUIDE.md) |
+| Hướng dẫn nội dung báo cáo PDF | [reports/REPORT_GUIDE.md](reports/REPORT_GUIDE.md) |
+| Hướng dẫn nội dung slide | [slides/SLIDE_GUIDE.md](slides/SLIDE_GUIDE.md) |
+| Hướng dẫn dựng Power BI | [powerbi/POWERBI_BUILD_GUIDE.md](powerbi/POWERBI_BUILD_GUIDE.md) |
+| Bảng giảm tải scope report/slide | [docs/SCOPE_PRIORITIZATION.md](docs/SCOPE_PRIORITIZATION.md) |
 | Plan dọn sạch project | [docs/CLEANUP_PLAN.md](docs/CLEANUP_PLAN.md) |
 | Hướng dẫn chấm | [INSTRUCTOR.md](INSTRUCTOR.md) |
 | Bản đồ rubric | [docs/GRADING_MAP.md](docs/GRADING_MAP.md) |
@@ -138,7 +145,7 @@ tests/                Kiểm thử pipeline
 | Notebook data forensics | [notebooks/06_data_forensics.ipynb](notebooks/06_data_forensics.ipynb) |
 | Data forensics artifacts | [reports/metrics/generator_reverse_engineering_summary.json](reports/metrics/generator_reverse_engineering_summary.json) |
 | Hình forensics/trend | [reports/figures/feature_information_audit.png](reports/figures/feature_information_audit.png) |
-| Power BI data pack | [powerbi/README.md](powerbi/README.md) |
+| Power BI data pack | [powerbi/README.md](powerbi/README.md), [powerbi/POWERBI_BUILD_GUIDE.md](powerbi/POWERBI_BUILD_GUIDE.md) |
 
 ## Thông tin nhóm
 

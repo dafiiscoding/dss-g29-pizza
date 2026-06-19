@@ -1,3 +1,10 @@
+"""Data forensics: chứng minh dữ liệu được sinh tự động (synthetic).
+
+Gồm: recover công thức tất định, suy luận ngưỡng nhãn, lượng tử hoá duration,
+mutual information + permutation test (phân biệt tín hiệu thật vs nhiễu), kiểm
+định đồng nhất brand + bootstrap ΔF2. Phục vụ notebook 06. Thuật ngữ (MI,
+permutation test, deterministic, ablation…) xem `docs/GLOSSARY.md`.
+"""
 import json
 import math
 

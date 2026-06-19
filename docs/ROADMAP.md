@@ -75,7 +75,7 @@ Artifact:
 
 ## GĐ3 - Mô hình
 
-So sánh sáu classifier:
+So sánh tám classifier (để đáp ứng checklist 8 kiến trúc mô hình):
 
 - Logistic Regression
 - Decision Tree
@@ -83,6 +83,8 @@ So sánh sáu classifier:
 - k-NN
 - SVM
 - Random Forest
+- Gradient Boosting
+- Multi-layer Perceptron (ANN)
 
 Metric:
 
@@ -128,6 +130,8 @@ Artifact:
 
 - `reports/metrics/transport_assignment.csv`
 - `reports/metrics/transport_assignment_summary.json`
+- `reports/metrics/transport_cost_policy_spec.csv`
+- `reports/figures/transport_assignment_cost.png`
 
 ## GĐ6 - Dashboard và Power BI
 
@@ -154,6 +158,7 @@ Artifact:
 - `powerbi/fact_monthly_demand_forecast.csv`
 - `powerbi/fact_recommendation_rules.csv`
 - `powerbi/fact_data_realism_audit.csv`
+- `powerbi/POWERBI_BUILD_GUIDE.md`
 
 ## GĐ7 - Báo cáo, slide và minh chứng
 
@@ -167,18 +172,21 @@ Artifact:
 - Metric CSV/JSON.
 - Hình trong `reports/figures/`.
 - README, DATA, PROGRESS, WORKFLOW_PRESENTATION_GUIDE, CLEANUP_PLAN.
-- LaTeX report PDF và Beamer slide PDF.
+- LaTeX report PDF + `reports/REPORT_GUIDE.md`.
+- Beamer slide PDF + `slides/SLIDE_GUIDE.md`.
 - Screenshot dashboard nếu cần nộp.
 
 Artifact:
 
 - `reports/PIZZA_DSS_REPORT.pdf`
+- `reports/REPORT_GUIDE.md`
 - `slides/PIZZA_DSS_SLIDE_DECK.pdf`
+- `slides/SLIDE_GUIDE.md`
 
 ## Runbook
 
 ```powershell
-cd pizza_delivery_dss
+cd dss-g29-pizza
 python -m scripts.run_all
 python -m unittest discover -s tests -v
 streamlit run app/streamlit_app.py

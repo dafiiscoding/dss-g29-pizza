@@ -1,6 +1,11 @@
+"""Cấu hình trung tâm: đường dẫn thư mục, danh sách feature, cột cấm (leakage),
+seed ngẫu nhiên và ngưỡng priority. Sửa ở ĐÂY thay vì rải rác trong code.
+
+Thuật ngữ (leakage, feature, stratified…) xem `docs/GLOSSARY.md`.
+"""
 from pathlib import Path
 
-RANDOM_STATE = 42
+RANDOM_STATE = 42  # seed cố định để mọi lần chạy ra kết quả giống nhau (tái lập)
 ANALYSIS_DATE = "2026-06-15"
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

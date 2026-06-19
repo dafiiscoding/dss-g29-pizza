@@ -1,3 +1,10 @@
+"""Đọc dữ liệu Kaggle, chuẩn hoá schema, tạo feature kỹ thuật, và chia
+train/dev/test **chống rò rỉ (leakage)**.
+
+Luồng chính cho người mới: `load_dataset()` -> `split_dataset()` ->
+`export_processed_splits()`. `validate_feature_contract()` chặn mọi cột biết-sau-
+giao-hàng. Thuật ngữ xem `docs/GLOSSARY.md`.
+"""
 import json
 import zipfile
 from pathlib import Path

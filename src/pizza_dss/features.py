@@ -1,3 +1,9 @@
+"""Tiền xử lý feature: chuẩn hoá số (StandardScaler) + mã hoá phân loại
+(OneHotEncoder), gói trong ColumnTransformer.
+
+Quan trọng: preprocessor được **fit trên train** (trong Pipeline) để tránh
+leakage. Thuật ngữ xem `docs/GLOSSARY.md`.
+"""
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 

@@ -1,3 +1,9 @@
+"""Sinh hàng đợi ưu tiên cho dashboard: chạy mô hình khoá trên test, gắn Risk
+Score/Priority/Action cho từng đơn rồi sắp theo rủi ro giảm dần.
+
+Là cầu nối giữa mô hình (modeling) và DSS (decision_rules) cho Streamlit/Power BI.
+Thuật ngữ xem `docs/GLOSSARY.md`.
+"""
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -12,6 +18,7 @@ from pizza_dss.data_loader import load_processed_splits
 from pizza_dss.decision_rules import (
     RISK_COMPONENT_WEIGHTS,
     calculate_delay_risk_components,
+    risk_component_policy_spec,
     get_dss_decision,
 )
 from pizza_dss.modeling import load_best_model, predict_delay_probability
@@ -165,9 +172,11 @@ def write_dss_artifacts(queue):
     calibration = risk_calibration_table(queue)
     sensitivity = priority_threshold_sensitivity(queue)
     breakdown = risk_component_breakdown(queue)
+    policy = pd.DataFrame(risk_component_policy_spec())
     calibration.round(6).to_csv(METRICS_DIR / "risk_calibration.csv", index=False)
     sensitivity.round(6).to_csv(METRICS_DIR / "priority_threshold_sensitivity.csv", index=False)
     breakdown.round(6).to_csv(METRICS_DIR / "risk_component_breakdown.csv", index=False)
+    policy.to_csv(METRICS_DIR / "risk_component_policy_spec.csv", index=False)
     _write_dss_figures(calibration, sensitivity, breakdown)
     return {
         "risk_calibration_rows": int(len(calibration)),

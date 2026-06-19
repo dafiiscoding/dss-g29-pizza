@@ -49,7 +49,11 @@ câu hỏi bắt buộc"** trả lời gọn ở đầu) hoặc chạy dashboard
 
 Tài liệu phụ: [`docs/GLOSSARY.md`](docs/GLOSSARY.md) (từ điển),
 [`docs/WORKFLOW_PRESENTATION_GUIDE.md`](docs/WORKFLOW_PRESENTATION_GUIDE.md) (hướng
-dẫn trình bày), [`GOAL.md`](GOAL.md) (mục tiêu & tiêu chí).
+dẫn trình bày), [`reports/REPORT_GUIDE.md`](reports/REPORT_GUIDE.md) (nội dung
+báo cáo), [`slides/SLIDE_GUIDE.md`](slides/SLIDE_GUIDE.md) (nói slide),
+[`powerbi/POWERBI_BUILD_GUIDE.md`](powerbi/POWERBI_BUILD_GUIDE.md) (dựng Power
+BI), [`docs/SCOPE_PRIORITIZATION.md`](docs/SCOPE_PRIORITIZATION.md) (cái gì nên
+đưa vào report/slide chính), [`GOAL.md`](GOAL.md) (mục tiêu & tiêu chí).
 
 ---
 
@@ -80,7 +84,7 @@ Các chỉ số chính nên nhìn (định nghĩa đầy đủ trong GLOSSARY):
 ## 4. Nếu bạn muốn tự chạy lại (không bắt buộc để đọc hiểu)
 
 ```powershell
-cd pizza_delivery_dss
+cd dss-g29-pizza
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m scripts.run_all      # chạy lại toàn bộ (18 bước)
