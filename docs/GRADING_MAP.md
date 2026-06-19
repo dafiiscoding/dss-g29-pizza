@@ -4,7 +4,7 @@ Tài liệu này giúp bám rubric giống dự án CrisisMMD nhưng ở phạm 
 
 | Tiêu chí | Cách đáp ứng | Artifact |
 |---|---|---|
-| Hiểu vấn đề và quyết định | Quản lý cần biết đơn nào có nguy cơ trễ để ưu tiên theo dõi/điều phối | `reports/final_report_draft.md` Chương 1 |
+| Hiểu vấn đề và quyết định | Quản lý cần biết đơn nào có nguy cơ trễ để ưu tiên theo dõi/điều phối | `reports/PIZZA_DSS_REPORT.pdf` Chương 1 |
 | Dữ liệu và tiền xử lý | Kaggle Excel thật, audit schema, missing, duplicate, leakage, split cố định | `docs/DATA.md`, `data_loader.py`, `data_quality_summary.json` |
 | Phân tích và insight | Delay rate, synthetic audit, K-Means, association rules, hypothesis tests | `notebooks/02_eda.ipynb`, `synthetic_data_audit.csv`, `hypothesis_tests.csv` |
 | Data forensics / reverse-engineering | Truy ngược công thức tất định, lượng tử hóa duration, MI categorical, uniformity GOF, brand ablation | `src/pizza_dss/data_forensics.py`, `generator_reverse_engineering_summary.json` |
@@ -17,7 +17,7 @@ Tài liệu này giúp bám rubric giống dự án CrisisMMD nhưng ở phạm 
 | Dashboard/BI | Streamlit tám tab và Power BI-ready data pack mở rộng, gồm Risk/transport policy tables | `app/streamlit_app.py`, `powerbi/`, `powerbi/POWERBI_BUILD_GUIDE.md` |
 | Báo cáo/slide | LaTeX report PDF và slide PDF | `reports/PIZZA_DSS_REPORT.pdf`, `reports/REPORT_GUIDE.md`, `slides/PIZZA_DSS_SLIDE_DECK.pdf`, `slides/SLIDE_GUIDE.md` |
 | Minh chứng tái lập | `run_all`, notebooks executed, tests pass | `scripts/run_all.py`, `tests/test_pipeline.py` |
-| Giới hạn và khuyến nghị | Nêu leakage, split, target definition, Priority chưa tối ưu thống kê | `reports/final_report_draft.md` |
+| Giới hạn và khuyến nghị | Nêu leakage, split, target definition, Priority chưa tối ưu thống kê | `reports/PIZZA_DSS_REPORT.pdf` |
 
 ## Mapping kiến thức môn học
 

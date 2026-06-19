@@ -6,7 +6,6 @@
 - Đề tài: Hệ hỗ trợ quyết định điều phối giao pizza dựa trên dự báo đơn trễ
 - Giảng viên/giảng viên giao đề tài: TS. Lê Hải Hà; TS. Trịnh Đình Thăng
 - Dataset: Kaggle `akshaygaikwad448/pizza-delivery-data-with-enhanced-features`
-- Báo cáo draft: `reports/final_report_draft.md`
 - Báo cáo PDF: `reports/PIZZA_DSS_REPORT.pdf`
 - Hướng dẫn nội dung báo cáo: `reports/REPORT_GUIDE.md`
 - Slide PDF: `slides/PIZZA_DSS_SLIDE_DECK.pdf`

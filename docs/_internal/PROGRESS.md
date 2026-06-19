@@ -126,7 +126,7 @@
   liệu tham khảo.
 - Report guide: `reports/REPORT_GUIDE.md`, giải thích vai trò từng chương, bằng
   chứng cần đọc và phần nhóm cần kiểm tra trước khi nộp.
-- Scope prioritization: `docs/SCOPE_PRIORITIZATION.md`, phân tầng nội dung lõi
+- Scope prioritization: `docs/_internal/SCOPE_PRIORITIZATION.md`, phân tầng nội dung lõi
   và phụ để report/slide không lan man.
 - Slide PDF: `slides/PIZZA_DSS_SLIDE_DECK.pdf`.
 - Slide guide: `slides/SLIDE_GUIDE.md`, có timing và speaking notes từng slide.

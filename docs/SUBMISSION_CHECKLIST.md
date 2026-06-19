@@ -15,10 +15,10 @@ artifact, report, slide và Power BI data pack.
 | Hướng dẫn nội dung slide | `slides/SLIDE_GUIDE.md` |
 | Hướng dẫn chấm nhanh | `INSTRUCTOR.md` |
 | Hướng dẫn đọc hiểu/trình bày | `docs/WORKFLOW_PRESENTATION_GUIDE.md` |
-| Bảng giảm tải scope | `docs/SCOPE_PRIORITIZATION.md` |
-| Plan dọn sạch | `docs/CLEANUP_PLAN.md` |
+| Bảng giảm tải scope | `docs/_internal/SCOPE_PRIORITIZATION.md` |
+| Plan dọn sạch | `docs/_internal/CLEANUP_PLAN.md` |
 | Mapping rubric | `docs/GRADING_MAP.md` |
-| Tiến độ và kết quả khóa | `docs/PROGRESS.md` |
+| Tiến độ và kết quả khóa | `docs/_internal/PROGRESS.md` |
 | Reverse-engineering dữ liệu | `reports/metrics/generator_reverse_engineering_summary.json` |
 | Power BI pack | `powerbi/README.md`, `powerbi/POWERBI_BUILD_GUIDE.md` |
 

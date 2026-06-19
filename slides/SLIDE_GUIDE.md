@@ -1,57 +1,76 @@
-# Hướng dẫn thuyết trình Slide - Pizza Delivery DSS
+# Hướng dẫn thuyết trình Slide — Pizza Delivery DSS
 
-Tài liệu này cung cấp kịch bản nói và hướng dẫn trình bày chi tiết cho từng slide trong tệp tin Beamer [pizza_dss_slides.tex](file:///C:/Users/doand/Desktop/Workspace/1-Projects/ml-dss/pizza_delivery_dss/slides/pizza_dss_slides.tex).
+> Khớp với `pizza_dss_slides.tex` / `PIZZA_DSS_SLIDE_DECK.pdf` bản hiện tại
+> (**33 frame nội dung** + title + mục lục + cảm ơn). Mỗi mục dưới đây là một
+> frame; số thứ tự trùng số trên tiêu đề slide.
+> Thời lượng gợi ý: **20–25 phút** + hỏi đáp.
 
----
+## Bố cục & phân vai gợi ý
 
-## 1. Phân bổ thời gian (Tổng cộng 10-12 phút)
+| Phần | Frame | Người trình bày (gợi ý) |
+|---|---|---|
+| Mở đầu + Phần I — Bài toán & dữ liệu | Title → 5 | Đoàn Danh Long |
+| Phần II — Dự đoán đơn trễ | 6 → 16 | Vũ Quang Vinh + Đoàn Danh Long |
+| Phần III — Từ dự đoán đến quyết định | 17 → 22 | Nguyễn Tuấn Anh |
+| Phần IV — Mở rộng & trình bày | 23 → 33 | Nguyễn Đăng Đức |
 
-- **Mở đầu & Dữ liệu (Slide 1-5):** 2 phút.
-- **EDA & Phân tích Nghiệp vụ (Slide 6-11):** 3 phút.
-- **Mô hình học máy (Slide 12-16):** 3 phút.
-- **Hệ hỗ trợ quyết định DSS & BI (Slide 17-21):** 2 phút.
-- **Tái lập, Phản biện \& Giới hạn (Slide 22-27):** 2 phút.
-
----
-
-## 2. Kịch bản nói chi tiết từng Slide
-
-| Slide | Tiêu đề | Hình ảnh minh họa | Kịch bản nói chi tiết |
-|---|---|---|---|
-| **1** | Title Slide | Hình nền đỏ HUST | "Xin chào các thầy và các bạn. Hôm nay nhóm 29 xin phép trình bày đồ án học phần Hệ hỗ trợ quyết định với đề tài: Hệ hỗ trợ quyết định điều phối giao pizza dựa trên dự báo đơn giao trễ." |
-| **2** | Mục lục / Agenda | Cột nội dung 4 phần | "Bài thuyết trình của nhóm gồm 4 phần chính: (I) Giới thiệu & Dữ liệu; (II) Phân tích EDA; (III) Mô hình hóa học máy; và (IV) Thiết kế hệ DSS cùng Dashboard." |
-| **3** | 1. Bài toán \& Quyết định cần hỗ trợ | `pipeline_overview.png` | "Bài toán của chúng ta là điều phối giao hàng hiệu quả. Điều phối viên cần xác định sớm đơn nào có nguy cơ trễ trước khi giao để can thiệp. Hệ DSS của nhóm nhận thông tin đơn hàng lúc vừa đặt, dùng AI dự báo xác suất trễ, rồi dịch thành điểm rủi ro và gợi ý hành động cụ thể." |
-| **4** | 2. Dữ liệu, Rò rỉ (Leakage) \& Ngưỡng mục tiêu | `delay_threshold_inference.png` | "Dữ liệu gồm 1.004 đơn hàng. Để chống rò rỉ dữ liệu (leakage), nhóm cấm tuyệt đối các biến sau giao hàng như duration hay delay. Tiếp theo, nhóm dùng thuật toán quét ngưỡng (Sweep Threshold) trên duration và tìm ra ranh giới nhãn trễ ngầm định là 30 phút." |
-| **5** | 3. Khám định Dữ liệu (Synthetic Forensics) | `generator_deterministic_formula_errors.png` | "Đặc biệt, nhóm đã khám định dữ liệu (data forensics) và chứng minh bằng toán học rằng đây là dữ liệu sinh tự động. Nhóm tìm ra 7 công thức tất định sai số bằng 0 (như ước lượng duration bằng 2.4 lần khoảng cách). Vì vậy nhóm diễn giải kết quả rất thận trọng, tránh overclaim." |
-| **6** | 4. Phân tích Khám phá (EDA) - Phân phối Nhãn | `delay_distribution.png` | "Dữ liệu bị mất cân bằng nhãn nhẹ với khoảng 21\% đơn bị trễ. Do đó, chúng ta không thể dùng metric Accuracy một mình vì nếu đoán 'Luôn đúng giờ' đã đạt 79\% nhưng không bắt được đơn trễ nào. Nhóm bắt buộc dùng F2-Score và MCC làm thước đo chính." |
-| **7** | 5. EDA - Các yếu tố rủi ro vận hành chính | `delay_rate_by_traffic.png` | "Qua EDA, hai yếu tố dẫn dắt rủi ro trễ lớn nhất là Giao thông (kẹt xe làm trễ tăng vọt) và Khoảng cách di chuyển xa. Khi kết hợp kẹt xe với quãng đường dài, rủi ro giao trễ gần như là chắc chắn." |
-| **8** | 6. EDA - Hành vi Khách hàng \& Sở thích | `size_preference.png` | "Khách hàng ưa chuộng nhất là pizza size Medium và loại pizza Non-Veg. Tuy nhiên, loại bánh Cheese Burst và các size XL/Large lại có tỷ lệ trễ bếp cao hơn bình thường, là thông tin quan trọng để điều phối chú ý cảnh báo." |
-| **9** | 7. Dự báo Nhu cầu \& Lập kế hoạch nhân sự | `monthly_demand_forecast.png` | "Để minh họa quy trình hoạch định, nhóm dùng mô hình seasonal-naive dự báo nhu cầu đơn hàng 6 tháng tới. Do dữ liệu synthetic có MAPE cao (45.7\%), nhóm chỉ dùng làm demo. Từ phân phối giờ cao điểm lúc 19h, nhóm đề xuất kế hoạch phân bổ nhân sự tối ưu." |
-| **10** | 8. Dự báo Xu hướng Sở thích | `preference_size_share_forecast.png` | "Nhóm cũng thực hiện dự báo xu hướng thị phần của các size bánh và loại pizza trong tương lai. Kết quả cho thấy xu hướng thị hiếu gần như đi ngang và đây là artifact của hàm sinh dữ liệu tự động." |
-| **11** | 9. Kiến thức Môn học Áp dụng trong Dự án | Bảng đối chiếu | "Đồ án này bao phủ toàn diện các kiến thức môn học từ DSS, phân loại supervised, so sánh mô hình, đánh giá stability, phân cụm unsupervised K-Means, luật kết hợp Apriori cho đến tối ưu hóa vận tải." |
-| **12** | 10. Feature Engineering: Compact vs Full Feature Set | `correlation_heatmap.png` | "Nhóm thiết kế hai tập đặc trưng: Full Set chứa 17 đặc trưng và Compact Set loại bỏ các biến trùng lặp thông tin (như estimated duration hay complexity). Thử nghiệm trên mô hình Logistic Regression cho thấy Compact Set đạt F2 dev tốt hơn (0.943 vs 0.928) và giảm thiểu overfit." |
-| **13** | 11. So sánh Mô hình \& Tại sao loại Bayes? | `model_comparison.png` | "Nhóm so sánh 6 classifier trên tập Dev. Logistic Regression chiến thắng với F2 tốt nhất (0.9434). Trong khi đó, Gaussian Naive Bayes đạt điểm thấp kỷ lục (F2 chỉ 0.66) do vi phạm nặng nề giả định độc lập đặc trưng (các biến khoảng cách, traffic phụ thuộc chặt chẽ)." |
-| **14** | 12. Siêu tham số \& Tối ưu Ngưỡng F-beta | `fbeta_threshold_curve.png` | "Nhóm tune siêu tham số C của mô hình LR trên Train bằng 5-Fold CV. Bản tuned C=0.3 cho kết quả dev kém hơn nên nhóm giữ default C=1.0. Quét ngưỡng F2 tối ưu trên Dev cho kết quả tốt nhưng khi chuyển sang Test làm tăng FP, nên nhóm giữ ngưỡng kỹ thuật 0.5." |
-| **15** | 13. Kiểm thử Độ ổn định (Stability Audit) | `model_stability_f2_distribution.png` | "Để chứng minh kết quả không phải do ăn may một lần chia tập, nhóm chạy thử nghiệm stability chia lại ngẫu nhiên 100 lần trên pool train+dev. F2-score đạt trung bình 0.9419 với độ lệch chuẩn rất nhỏ, chứng tỏ mô hình có tính ổn định cực cao." |
-| **16** | 14. Kết quả trên Test set \& So sánh Baseline | Bảng kết quả | "Khi đánh giá độc lập một lần trên tập Test khóa, mô hình đạt Accuracy 96.02\%, F2 đạt 0.9491, và Recall đạt 97.62\% (chỉ bỏ lọt duy nhất 1 đơn trễ). Kết quả này vượt trội hoàn toàn so với hai baseline đoán ngây thơ." |
-| **17** | 15. Tầng Quyết định DSS: Xây dựng Risk Score | `risk_component_breakdown.png` | "Ở tầng hỗ trợ quyết định, nhóm xây dựng công thức điểm rủi ro Risk Score từ 0 đến 100. Điểm này kết hợp 55\% từ xác suất AI dự báo với 45\% áp lực vận hành (traffic, distance, complexity,...). Giúp người dùng hiểu rõ tại sao một đơn hàng bị rủi ro." |
-| **18** | 16. DSS: Calibration \& Độ Nhạy Ngưỡng | `risk_calibration.png` | "Hiệu chuẩn cho thấy tỷ lệ trễ thực tế tăng vọt từ nhóm Low (0\%) lên Medium (7.3\%) và High (88.6\%). Nhóm đặt ngưỡng phân luồng ưu tiên 35/65, bắt được 92.9\% tổng số đơn trễ rơi vào nhóm High Priority." |
-| **19** | 17. DSS: Hàng đợi Ưu tiên \& Khuyến nghị Hành động | Bảng khuyến nghị hành động | "Tương ứng với mỗi phân luồng ưu tiên, hệ thống đưa ra khuyến nghị hành động nghiệp vụ cụ thể cho điều phối viên: Nhóm High cần gán tài xế ưu tiên và chuẩn bị tài xế dự phòng; nhóm Medium cần theo dõi sát; nhóm Low xử lý thường." |
-| **20** | 18. Tối ưu Vận tải (Hungarian Assignment Scenario) | `transport_assignment_cost.png` | "Để minh họa tầng prescriptive DSS, nhóm lấy các đơn hàng High Priority và gán tối ưu cho đội tài xế giả lập. Sử dụng thuật toán Hungarian để tối thiểu hóa ma trận chi phí (phạt trễ, thưởng cùng tuyến), đạt chi phí trung bình tối ưu là 32.84." |
-| **21** | 19. Ứng dụng Thực tế: Streamlit Dashboard - Tổng quan | `dashboard_overview.jpg` | "Nhóm xây dựng ứng dụng web Streamlit Dashboard hoàn chỉnh gồm 8 tab. Tab Overview hiển thị nhanh KPI vận hành thời gian thực và biểu đồ, tab EDA cho phép lọc nhanh tỷ lệ trễ động theo nhu cầu người dùng." |
-| **22** | 20. Dashboard: Ra Quyết định \& Forensics | `dashboard_single_order.jpg` | "Tab Single Order Demo cho phép điều phối viên nhập thông tin 1 đơn hàng và nhận ngay điểm rủi ro bóc tách chi tiết. Tab Delay Queue hiển thị hàng đợi ưu tiên và gợi ý gán tài xế tối ưu trực tiếp." |
-| **23** | 21. Minh chứng: Power BI Data Pack \& Khả năng tái lập | Khối mã lệnh | "Dự án cung cấp gói dữ liệu sạch Power BI (Fact/Dim CSV) kèm hướng dẫn dựng chi tiết. Đặc biệt, toàn bộ dự án có khả năng tái lập 100\% chỉ bằng 1 lệnh chạy duy nhất `python -m scripts.run_all` vượt qua 30 unit tests." |
-| **24** | 22. Các câu hỏi phản biện \& Giải pháp đối phó | Danh sách hỏi - đáp | "Nhóm đã chuẩn bị sẵn câu trả lời tự vệ cho các câu hỏi hội đồng hay bắt bẻ như: Vì sao không dùng duration làm feature (leakage); Vì sao biết ngưỡng trễ là 30 phút (sweep threshold); Tại sao không dùng Bayes (giả định độc lập bị vi phạm)." |
-| **25** | 23. Giới hạn \& Caveats cần lưu ý | Danh sách caveats | "Nhóm thẳng thắn nêu rõ giới hạn: dữ liệu Kaggle là synthetic nên điểm mô hình cao là do cấu trúc dữ liệu sinh, các phần dự báo nhu cầu hay chất lượng thương hiệu chỉ mang tính chất minh họa phương pháp luận." |
-| **26** | 24. Kết luận \& Hướng phát triển | Cột kết luận | "Đồ án đã xây dựng thành công một chu trình DSS khép kín nghiêm ngặt và minh bạch. Hướng phát triển tiếp theo là thu thập dữ liệu GPS tài xế thật, tích hợp chi phí thực tế và kiểm thử hệ thống với người vận hành thực tế." |
-| **27** | Cám ơn / Q\&A | Hình end-empty HUST | "Nhóm xin chân thành cảm ơn các thầy cô giáo đã lắng nghe. Nhóm sẵn sàng nhận câu hỏi phản biện từ phía hội đồng." |
+Thông điệp xuyên suốt cần lặp lại: **xương sống là "dự đoán đơn trễ → ra quyết
+định"; các phân tích nghiệp vụ chỉ là phần mở rộng; dữ liệu là giả lập nên không
+thổi phồng kết quả.**
 
 ---
 
-## 3. Quy tắc khi chỉnh sửa Slide Beamer
+## Title + Mục lục
+- Giới thiệu nhóm, đề tài. Một câu chốt: "Hệ hỗ trợ quyết định đoán trước đơn nào
+  dễ trễ và biến dự đoán đó thành hành động điều phối."
+- Mục lục: chỉ ra 4 phần, nhấn Phần II–III là lõi.
 
-- Biên dịch lại slide PDF sau khi thay đổi mã nguồn bằng lệnh:
-  ```powershell
-  python -m scripts.build_slides_pdf
-  ```
-- File PDF kết quả thuyết trình chính thức sẽ được ghi đè tại: `slides/PIZZA_DSS_SLIDE_DECK.pdf`.
+## Phần I — Bài toán & dữ liệu
+1. **Bài toán & quyết định** — bối cảnh (giờ cao điểm, đơn trễ), 3 lớp DSS: đầu vào → dự đoán → đề xuất. Chỉ vào sơ đồ pipeline.
+2. **Dữ liệu & chống rò rỉ** — 1.004 đơn; nhấn: cấm cột sau-giao-hàng vì chúng sinh ra nhãn (rò rỉ = xem trước đáp án).
+3. **Suy luận ngưỡng trễ** — không tự đặt SLA; dò ngưỡng → 30 phút khớp 0 sai lệch. Điểm chặt chẽ, nói chậm.
+4. **Truy vết — vì sao** — thừa nhận dữ liệu giả lập; biến điểm yếu thành phân tích; không thổi phồng.
+5. **Truy vết — bằng chứng** — 7 công thức tất định (sai số ~0). Kết: biến trùng thông tin → loại ở bước chọn đặc trưng.
+
+## Phần II — Dự đoán đơn trễ (LÕI)
+6. **Phân phối nhãn & cách đánh giá** — chỉ ~21% đơn trễ → không nhìn mỗi độ chính xác; chọn F2 (phạt bỏ sót).
+7. **Giao thông** — yếu tố gây trễ số 1; sẽ đưa vào điểm rủi ro.
+8. **Quãng đường & độ phức tạp** — xa + đông = gần chắc trễ; complexity đóng góp nhỏ hơn.
+9. **Chọn đặc trưng** — bộ đầy đủ (17) vs rút gọn (12); vì sao ưu tiên rút gọn.
+10. **Rút gọn thắng** — bảng F2/MCC: rút gọn cao hơn dù ít biến → khóa bộ 12 biến.
+11. **So sánh 6 mô hình** — Hồi quy Logistic tốt nhất theo F2; nêu nhanh các mô hình khác.
+12. **Vì sao loại Naive Bayes** — điểm thấp + giả định độc lập bị vi phạm; đã thử chứ không bỏ qua.
+13. **Tinh chỉnh siêu tham số** — chọn-xong-mới-tinh-chỉnh; bản gốc tốt hơn nên giữ (trung thực).
+14. **Quét ngưỡng quyết định** — ngưỡng tối ưu trên dev không "transfer" tốt sang test → giữ 0,5.
+15. **Độ ổn định (100 lần)** — F2 ~0,94 ổn định, không phải may mắn một lần chia tập.
+16. **Kết quả test & baseline** — bảng test; vượt 2 baseline; bỏ sót 1/42 đơn. Nhắc: điểm cao một phần do dữ liệu gần tất định.
+
+## Phần III — Từ dự đoán đến quyết định (LÕI)
+17. **Điểm rủi ro: công thức** — kết hợp xác suất mô hình (55%) + áp lực vận hành (45%); là chính sách minh bạch, không phải tối ưu thống kê.
+18. **Bóc tách thành phần** — cho điều phối viên thấy *vì sao* một đơn rủi ro cao.
+19. **Hiệu chuẩn** — tỷ lệ trễ thực tế tăng dần theo nhóm (0% → 7,3% → 88,6%) ⇒ điểm rủi ro "đúng".
+20. **Độ nhạy ngưỡng** — nhóm cao bắt 92,9% đơn trễ; ngưỡng là nút điều chỉnh tải.
+21. **Hàng đợi & hành động** — bảng Cao/Vừa/Thấp → hành động cụ thể.
+22. **Xếp tài xế** — bài toán phân công (Hungary); đơn thật, đội xe giả lập; 12 đơn/6 tài xế.
+
+## Phần IV — Mở rộng & trình bày
+23. **[Mở rộng] Hành vi khách hàng** — size/type; nhắc caveat giả lập.
+24. **[Mở rộng] Dự báo nhu cầu** — sai số cao, chỉ minh hoạ cách lập kế hoạch.
+25. **[Mở rộng] Xếp ca & xu hướng** — cao điểm 19h; xu hướng là đặc tính bộ sinh dữ liệu.
+26. **Đối chiếu rubric** — 4 nhóm yêu cầu môn đều phủ; chi tiết 20 mục ở Bảng 7.1 báo cáo.
+27. **Bảng điều khiển — tổng quan & khám phá** — chỉ vào ảnh chụp, nói vai trò người điều phối.
+28. **Bảng điều khiển — quyết định & chất lượng dữ liệu** — thử một đơn, hàng đợi, cảnh báo dữ liệu giả lập.
+29. **Tái lập** — một lệnh dựng lại, bộ kiểm thử pass; số liệu sinh một nơi.
+30–31. **Câu hỏi phản biện** — đọc lướt; đây là "đạn" thủ sẵn cho phần hỏi đáp.
+32. **Giới hạn** — nói thẳng: không quảng cáo điểm 96% là năng lực thật; chưa dùng mô hình deep mới.
+33. **Kết luận & hướng phát triển** — chốt giá trị: quy trình + truy vết + ra quyết định minh bạch.
+
+## Cảm ơn
+- Mời câu hỏi. Đội cử 1 người điều phối hỏi đáp, dựa vào frame 30–31 và phần Giới hạn.
+
+---
+
+## Mẹo trình bày
+- Mỗi frame **một thông điệp**; đừng đọc nguyên chữ trên slide.
+- Khi bị hỏi "điểm cao thế dùng được không?" → trả lời theo frame 31: dữ liệu giả lập, giá trị là quy trình.
+- Giữ nhịp: Phần I ~4', Phần II ~9', Phần III ~6', Phần IV ~5'.

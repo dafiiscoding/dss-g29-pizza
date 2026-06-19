@@ -130,12 +130,11 @@ tests/                Kiểm thử pipeline
 | Hướng dẫn nội dung báo cáo PDF | [reports/REPORT_GUIDE.md](reports/REPORT_GUIDE.md) |
 | Hướng dẫn nội dung slide | [slides/SLIDE_GUIDE.md](slides/SLIDE_GUIDE.md) |
 | Hướng dẫn dựng Power BI | [powerbi/POWERBI_BUILD_GUIDE.md](powerbi/POWERBI_BUILD_GUIDE.md) |
-| Bảng giảm tải scope report/slide | [docs/SCOPE_PRIORITIZATION.md](docs/SCOPE_PRIORITIZATION.md) |
-| Plan dọn sạch project | [docs/CLEANUP_PLAN.md](docs/CLEANUP_PLAN.md) |
+| Bảng giảm tải scope report/slide | [docs/_internal/SCOPE_PRIORITIZATION.md](docs/_internal/SCOPE_PRIORITIZATION.md) |
+| Plan dọn sạch project | [docs/_internal/CLEANUP_PLAN.md](docs/_internal/CLEANUP_PLAN.md) |
 | Hướng dẫn chấm | [INSTRUCTOR.md](INSTRUCTOR.md) |
 | Bản đồ rubric | [docs/GRADING_MAP.md](docs/GRADING_MAP.md) |
-| Báo cáo draft | [reports/final_report_draft.md](reports/final_report_draft.md) |
-| Báo cáo PDF LaTeX | [reports/PIZZA_DSS_REPORT.pdf](reports/PIZZA_DSS_REPORT.pdf) |
+| Báo cáo PDF (LaTeX) | [reports/PIZZA_DSS_REPORT.pdf](reports/PIZZA_DSS_REPORT.pdf) |
 | Slide PDF | [slides/PIZZA_DSS_SLIDE_DECK.pdf](slides/PIZZA_DSS_SLIDE_DECK.pdf) |
 | Notebook data/audit | [notebooks/01_data_audit_preprocessing.ipynb](notebooks/01_data_audit_preprocessing.ipynb) |
 | Notebook EDA | [notebooks/02_eda.ipynb](notebooks/02_eda.ipynb) |

@@ -6,10 +6,10 @@ ngẫu nhiên.
 
 ## 1. Đọc nhanh trong 10 phút
 
-1. Mở `docs/PROGRESS.md` để lấy trạng thái khóa, số liệu chính và giới hạn.
+1. Mở `docs/_internal/PROGRESS.md` để lấy trạng thái khóa, số liệu chính và giới hạn.
 2. Mở `README.md` để hiểu bài toán quyết định, dữ liệu, lệnh tái lập và cấu trúc.
 3. Mở `docs/GRADING_MAP.md` để đối chiếu rubric môn học.
-4. Mở `docs/SCOPE_PRIORITIZATION.md` để biết phần nào là lõi, phần nào chỉ nên
+4. Mở `docs/_internal/SCOPE_PRIORITIZATION.md` để biết phần nào là lõi, phần nào chỉ nên
    để phụ lục/notebook.
 5. Mở `reports/PIZZA_DSS_REPORT.pdf` để đọc bài nộp chính.
 6. Mở `reports/REPORT_GUIDE.md` nếu cần biết từng chương PDF đang chứng minh gì.
@@ -255,7 +255,7 @@ Kết quả khóa hiện tại:
 
 ## 4. Outline thuyết trình 10-12 phút
 
-Outline rút gọn chính thức nằm trong `docs/SCOPE_PRIORITIZATION.md`. Bản gọn
+Outline rút gọn chính thức nằm trong `docs/_internal/SCOPE_PRIORITIZATION.md`. Bản gọn
 nên ưu tiên:
 
 1. Bài toán quyết định và output DSS.
