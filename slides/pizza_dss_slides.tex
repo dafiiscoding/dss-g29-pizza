@@ -51,12 +51,37 @@
 \setlength{\leftmargini}{1.3em}
 \setbeamertemplate{frametitle continuation}{}
 
-\renewcommand{\titlePageTitleX}{-0.5cm}
-\renewcommand{\titlePageTitleY}{-0.5cm}
-\renewcommand{\hustTitleAlign}{\alignLeft}
-\renewcommand{\hustSubtitleAlign}{\alignLeft}
-\renewcommand{\hustAuthorAlign}{\alignLeft}
-\renewcommand{\hustInstAlign}{\alignLeft}
+% --- Trang tiêu đề: ghi đè macro của theme để tránh đè chữ nền & vòng cung ---
+% Neo trái, căn giữa theo chiều dọc, thu hẹp bề rộng (né vòng cung chấm đỏ bên
+% phải) và không đẩy khối chữ xuống vùng "ONE LOVE. ONE FUTURE." ở đáy.
+\renewcommand{\husttitlepage}{%
+  {%
+    \setbeamertemplate{background}{%
+      \includegraphics[width=\paperwidth,height=\paperheight]{\hustbg{title}}%
+      \drawHustPageNum
+    }%
+    \begin{frame}[plain]
+      \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=west, text width=0.60\paperwidth, inner sep=0pt,
+              xshift=0.9cm, yshift=-0.1cm]
+          at (current page.west)
+          {%
+            {\raggedright\huge\bfseries\color{hustprimary}%
+               \MakeUppercase{\inserttitle}\par}%
+            \vspace{0.26cm}
+            {\raggedright\large\bfseries\color{black!80}\insertsubtitle\par}%
+            \vspace{0.45cm}
+            {\raggedright
+               {\color{hustprimary}\normalsize\bfseries Người thực hiện:}\par
+               \vspace{4pt}
+               {\color{black}\small\insertauthor\par}}%
+            \vspace{0.35cm}
+            {\raggedright{\footnotesize\color{hustprimary}\bfseries\insertinstitute\par}}%
+          };
+      \end{tikzpicture}
+    \end{frame}
+  }%
+}
 
 % Macro tiện ích
 \newcommand{\blk}[1]{\textbf{\color{hustprimary}#1}}
@@ -68,13 +93,12 @@
 \subtitle{Từ dữ liệu đơn hàng đến dự đoán đơn trễ và quyết định điều phối}
 \author{
   \textbf{Nhóm 29} \\
-  \small
+  \footnotesize
   Đoàn Danh Long (20237354) \quad Vũ Quang Vinh (20237408) \\
   Nguyễn Đăng Đức (20237312) \quad Nguyễn Tuấn Anh (20237293)
 }
 \institute{
-  Đại học Bách khoa Hà Nội -- Khoa Toán Tin \\
-  Giảng viên: TS. Lê Hải Hà \quad \quad Hướng dẫn TH: TS. Trịnh Đình Thăng
+  GVHD: TS. Trần Ngọc Thăng, TS. Lê Hải Hà
 }
 \date{Tháng 6 năm 2026}
 
@@ -90,34 +114,35 @@
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Phần I — Bài toán \& dữ liệu}
-        \begin{itemize}\small
+        \begin{itemize}\footnotesize
             \item Bài toán \& quyết định cần hỗ trợ
             \item Dữ liệu \& chống rò rỉ thông tin
-            \item Suy luận ngưỡng trễ, truy vết dữ liệu
+            \item Ngưỡng trễ \& Kiểm định đồng nhất
+            \item Truy vết dữ liệu giả lập tất định
         \end{itemize}
-        \vspace{0.2cm}
+        \vspace{0.02cm}
         \blk{Phần II — Dự đoán đơn trễ}
-        \begin{itemize}\small
-            \item Yếu tố gây trễ (phân tích dữ liệu)
-            \item Chọn đặc trưng \& so sánh mô hình
-            \item Tinh chỉnh, ngưỡng \& độ ổn định
-            \item Kết quả kiểm thử so với baseline
+        \begin{itemize}\footnotesize
+            \item Phân phối nhãn \& Phân nhóm mức độ trễ
+            \item Yếu tố gây trễ: Giao thông, Cự ly, Bếp
+            \item So sánh mô hình \& Tinh chỉnh siêu tham số
+            \item Ngưỡng quyết định \& Kiểm thử độ ổn định
         \end{itemize}
 
         \column{0.5\linewidth}
         \blk{Phần III — Từ dự đoán đến quyết định}
-        \begin{itemize}\small
+        \begin{itemize}\footnotesize
             \item Điểm rủi ro \& bóc tách thành phần
-            \item Hiệu chuẩn \& độ nhạy ngưỡng
-            \item Hàng đợi ưu tiên \& hành động
-            \item Xếp tài xế (bài toán phân công)
+            \item Hiệu chuẩn \& độ nhạy ngưỡng ưu tiên
+            \item Hàng đợi hành động \& Phân công tối ưu
         \end{itemize}
-        \vspace{0.2cm}
-        \blk{Phần IV — Mở rộng \& trình bày}
-        \begin{itemize}\small
-            \item Phân tích nghiệp vụ mở rộng
-            \item Bảng điều khiển \& bộ dữ liệu báo cáo
-            \item Phản biện, giới hạn \& kết luận
+        \vspace{0.02cm}
+        \blk{Phần IV — Nghiệp vụ mở rộng \& Đóng gói}
+        \begin{itemize}\footnotesize
+            \item Phân tích hành vi, K-Means \& Apriori
+            \item Dự báo nhu cầu \& ca trực tương lai
+            \item Bảng điều khiển Streamlit đa nhiệm
+            \item Bộ dữ liệu báo cáo, giới hạn \& kết luận
         \end{itemize}
     \end{columns}
 \end{frame}
@@ -144,7 +169,7 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{pipeline_overview.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{pipeline_overview.png}
         \readfig{Mạch xử lý xuyên suốt: từ dữ liệu đơn đến quyết định điều phối.}
     \end{columns}
 \end{frame}
@@ -180,50 +205,48 @@
 
 \begin{frame}{3. Suy luận ngưỡng trễ từ chính dữ liệu}
     \begin{columns}[T]
-        \column{0.5\linewidth}
+        \column{0.52\linewidth}
         \blk{Vấn đề}
         \begin{itemize}
-            \item Dữ liệu không kèm cam kết thời gian giao, nên không biết bao nhiêu phút thì tính ``trễ''.
+            \item Dữ liệu không ghi nhận thời gian cam kết giao hàng.
         \end{itemize}
-        \vspace{0.12cm}
+        \vspace{0.05cm}
         \blk{Cách làm: dò ngưỡng}
         \begin{itemize}
-            \item Thử mọi mốc thời gian rồi đối chiếu với nhãn gốc.
-            \item Mọi đơn quá \textbf{30 phút} đều bị gắn ``trễ'' — khớp \textbf{tuyệt đối}, không sai lệch.
-            \item Do thời gian giao chỉ rơi vào bội số của 5, mốc 30 và 35 phút cho kết quả như nhau.
+            \item Đối chiếu thời gian giao thực tế với nhãn trễ gốc.
+            \item Khớp tuyệt đối tại mốc \textbf{30 phút} (sai số bằng 0).
+            \item Mốc 30 và 35 phút cho kết quả tương đương do dữ liệu làm tròn theo dải 5 phút.
         \end{itemize}
-        \vspace{0.12cm}
-        \blk{Kết luận} Ngưỡng trễ là \textbf{30 phút} — rút ra từ dữ liệu, không tự đặt.
+        \vspace{0.05cm}
+        \blk{Kết luận} Quy ước trễ của hệ thống là \textbf{30 phút}.
 
-        \column{0.48\linewidth}
+        \column{0.46\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{delay_threshold_inference.png}
-        \readfig{Độ lệch chạm 0 ở vùng ngưỡng 30--35 phút.}
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{delay_threshold_inference.png}
+        \readfig{Đo sai số tìm ngưỡng trễ: chạm 0 tại 30--35 phút.}
     \end{columns}
 \end{frame}
 
 \begin{frame}{4. Truy vết dữ liệu giả lập — vì sao cần?}
     \begin{columns}[T]
         \column{0.54\linewidth}
-        \blk{Lý do}
+        \blk{Lý do truy vết}
         \begin{itemize}
-            \item Bộ dữ liệu này thực ra do \textbf{máy sinh tự động}, không phải đơn hàng thật.
-            \item Không vạch ra điều đó thì rất dễ \emph{thổi phồng}: tưởng mô hình giỏi và các phân tích là sự thật thị trường.
+            \item Bộ dữ liệu được sinh mô phỏng bằng thuật toán máy tính.
+            \item Cần minh bạch hóa thuộc tính này để tránh việc thổi phồng hiệu năng mô hình dự báo ngoài thực tế.
         \end{itemize}
-        \vspace{0.12cm}
-        \blk{Quan điểm của nhóm}
+        \vspace{0.08cm}
+        \blk{Quan điểm trung thực học thuật}
         \begin{itemize}
-            \item \textbf{Không che giấu} điểm yếu dữ liệu — biến nó thành một phần phân tích có giá trị.
-            \item Vẫn chạy \textbf{trọn vẹn quy trình} môn học để thể hiện năng lực, nhưng luôn kèm ghi chú trung thực.
+            \item \textbf{Không che giấu} đặc tính dữ liệu sinh tự động.
+            \item Sử dụng các phân tích cấu trúc để chứng minh cơ chế sinh dữ liệu, thể hiện năng lực điều tra dữ liệu chuyên sâu.
         \end{itemize}
 
         \column{0.44\linewidth}
         \centering
         \footnotesize
         \blk{Thông điệp cốt lõi}\par\vspace{4pt}
-        Điểm mô hình cao \textbf{không} đồng nghĩa đoán giỏi ngoài đời. Điểm cao
-        đến từ việc dữ liệu được sinh theo công thức gần như cố định — và chính
-        phần truy vết này chứng minh điều đó.
+        Hiệu năng cao là hệ quả từ cơ chế sinh số liệu cố định. Điểm giá trị của đồ án là quy trình xử lý và độ minh bạch của hệ hỗ trợ quyết định.
     \end{columns}
 \end{frame}
 
@@ -245,8 +268,31 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{generator_deterministic_formula_errors.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{generator_deterministic_formula_errors.png}
         \readfig{Sai số dựng lại công thức cỡ $10^{-15}$ — tức là cố định.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{6. Kiểm định tính đồng nhất dữ liệu}
+    \begin{columns}[T]
+        \column{0.52\linewidth}
+        \blk{Mục tiêu kiểm định}
+        \begin{itemize}
+            \item Thẩm định tính tự nhiên của phân phối định tính bằng Chi-Square.
+        \end{itemize}
+        \vspace{0.05cm}
+        \blk{Kết quả thực nghiệm}
+        \begin{itemize}
+            \item \textbf{Thương hiệu:} $p = 0.896$ $\Rightarrow$ Phân phối đều hoàn hảo giữa các nhà hàng.
+            \item \textbf{Sản phẩm:} $p = 0.0$ $\Rightarrow$ Bác bỏ phân phối đều, thể hiện thiết kế mua hàng có chủ ý.
+        \end{itemize}
+        \vspace{0.05cm}
+        \blk{Kết luận} Có sự can thiệp nhân tạo khi sinh dữ liệu.
+
+        \column{0.46\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{uniformity_tests.png}
+        \readfig{Đo độ tương thích phân phối đều: thương hiệu đồng đều, cỡ/loại bánh bị lệch.}
     \end{columns}
 \end{frame}
 
@@ -254,74 +300,119 @@
 % PHẦN II — DỰ ĐOÁN ĐƠN TRỄ
 % =====================================================================
 
-\begin{frame}{6. Yếu tố gây trễ: phân phối nhãn \& cách đánh giá}
+\begin{frame}{7. Yếu tố gây trễ: phân phối nhãn \& độ đo chính}
     \begin{columns}[T]
-        \column{0.5\linewidth}
-        \blk{Lệch lớp}
+        \column{0.52\linewidth}
+        \blk{Mất cân bằng lớp}
         \begin{itemize}
-            \item 1.004 đơn nhưng chỉ 210 đơn trễ ($\sim 20{,}92\%$) — số đơn trễ ít hơn hẳn.
+            \item 210 đơn trễ trên tổng 1.004 đơn ($\sim 20{,}92\%$).
+            \item Lớp thiểu số cần được chú trọng đặc biệt.
         \end{itemize}
-        \vspace{0.12cm}
-        \blk{Hệ quả: không nhìn mỗi độ chính xác}
+        \vspace{0.05cm}
+        \blk{Lựa chọn độ đo}
         \begin{itemize}
-            \item Cứ đoán ``mọi đơn đều đúng giờ'' đã đạt độ chính xác 79\%, nhưng bắt được \textbf{0 đơn trễ} — vô dụng.
-            \item Phải xét thêm F2, MCC, độ chính xác cân bằng.
-            \item Lấy \textbf{F2} làm thước đo chính: phạt nặng việc \emph{bỏ sót} đơn trễ.
+            \item Tránh bẫy Accuracy ($79\%$ cho đoán ngây thơ).
+            \item Ưu tiên độ nhạy để hạn chế bỏ sót đơn trễ.
+            \item Chọn \textbf{F2-score} làm chỉ số tối ưu chính, kết hợp \textbf{MCC} đánh giá tổng thể.
         \end{itemize}
 
-        \column{0.48\linewidth}
+        \column{0.46\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{delay_distribution.png}
-        \readfig{Cột ``đúng giờ'' cao gấp khoảng 4 lần cột ``trễ''.}
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{delay_distribution.png}
+        \readfig{Tỷ lệ đơn trễ chỉ chiếm khoảng 1/5 tổng lượng đơn hàng.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{7. Yếu tố gây trễ: giao thông đứng đầu}
+\begin{frame}{8. Mức độ trễ và Đặc trưng vận hành}
+    \begin{columns}[T]
+        \column{0.54\linewidth}
+        \blk{Phân nhóm mức độ trễ}
+        \begin{itemize}
+            \item \textbf{Đúng giờ ($\le 30$ phút):} $79{,}08\%$, cự ly ngắn ($4{,}2$ km), ít kẹt xe ($20{,}5\%$).
+            \item \textbf{Trễ nhẹ ($35$ phút):} $4{,}38\%$, cự ly vừa ($5{,}5$ km).
+            \item \textbf{Trễ nặng ($\ge 40$ phút):} $16{,}53\%$, cự ly xa ($7{,}5 - 9{,}4$ km).
+        \end{itemize}
+        \vspace{0.05cm}
+        \blk{Đặc trưng nhóm trễ nặng}
+        \begin{itemize}
+            \item Độ phức tạp đơn hàng cao (nhiều toppings).
+            \item Đường đông (High Traffic) chiếm gần tuyệt đối ($96\% - 98\%$).
+        \end{itemize}
+
+        \column{0.42\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.26\textheight,keepaspectratio]{delay_severity_distribution.png}
+        \readfig{Phân nhóm mức độ trễ theo cự ly và kẹt xe.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{9. Yếu tố gây trễ: giao thông đứng đầu}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Mức độ giao thông}
         \begin{itemize}
             \item Khi đường đông (mức cao), tỷ lệ trễ tăng vọt.
             \item Mức vừa và thấp thì tỷ lệ trễ thấp hơn hẳn.
-            \item Đây là yếu tố vận hành quan trọng nhất, cần theo dõi sát.
-        \end{itemize}
-        \vspace{0.12cm}
-        \blk{Dùng vào đâu?}
-        \begin{itemize}
             \item Giao thông là một thành phần của điểm rủi ro (Phần III).
             \item Lưu ý: đây là tương quan, \textbf{không} khẳng định nhân quả.
         \end{itemize}
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{delay_rate_by_traffic.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{delay_rate_by_traffic.png}
         \readfig{Tỷ lệ trễ theo mức giao thông: cao $\gg$ vừa $>$ thấp.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{8. Yếu tố gây trễ: quãng đường \& độ phức tạp}
+\begin{frame}{10. Yếu tố gây trễ: Quãng đường di chuyển}
     \begin{columns}[T]
-        \column{0.5\linewidth}
-        \blk{Quãng đường}
+        \column{0.52\linewidth}
+        \blk{Tương quan quãng đường}
         \begin{itemize}
-            \item Đơn càng xa, thời gian di chuyển càng tăng (gần như tuyến tính).
-            \item Xa \textbf{cộng thêm} đường đông thì gần như chắc chắn trễ.
+            \item Ảnh hưởng trực tiếp đến thời gian giao hàng.
+            \item Tỷ lệ trễ theo dải khoảng cách:
+            \begin{itemize}\footnotesize
+                \item \textbf{0--3 km:} $0\%$ trễ (an toàn).
+                \item \textbf{3--6 km:} $7{,}38\%$ trễ (nguy cơ thấp).
+                \item \textbf{6--8 km:} $96{,}0\%$ trễ (nguy cơ cực cao).
+                \item \textbf{Trên 8 km:} $100\%$ trễ (chắc chắn trễ).
+            \end{itemize}
         \end{itemize}
-        \vspace{0.12cm}
-        \blk{Độ phức tạp đơn}
-        \begin{itemize}
-            \item Nhiều topping \& bánh cỡ lớn làm tăng thời gian chuẩn bị ở bếp.
-            \item Mức đóng góp vào rủi ro \textbf{nhỏ hơn} giao thông và quãng đường.
-        \end{itemize}
+        \vspace{0.05cm}
+        \blk{Nhận định} Mốc cự ly 6 km là ranh giới quan trọng trong điều phối.
 
-        \column{0.48\linewidth}
+        \column{0.46\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{delay_rate_by_distance_band.png}
-        \readfig{Tỷ lệ trễ tăng dần theo dải quãng đường.}
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{delay_rate_by_distance_band.png}
+        \readfig{Tỷ lệ trễ tăng vọt khi cự ly vượt quá 6 km.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{9. Chọn đặc trưng: rút gọn hay đầy đủ?}
+\begin{frame}{11. Yếu tố gây trễ: Độ phức tạp đơn hàng}
+    \begin{columns}[T]
+        \column{0.52\linewidth}
+        \blk{Tác động khâu chuẩn bị bếp}
+        \begin{itemize}
+            \item Phụ thuộc vào cỡ bánh và toppings đi kèm.
+            \item Tỷ lệ trễ theo độ phức tạp đơn:
+            \begin{itemize}\footnotesize
+                \item \textbf{Thấp (Low):} $1{,}65\%$ trễ (an toàn).
+                \item \textbf{Trung bình (Medium):} $11{,}88\%$ trễ.
+                \item \textbf{Cao (High):} $34{,}87\%$ trễ.
+                \item \textbf{Rất cao (Very High):} $41{,}67\%$ trễ.
+            \end{itemize}
+        \end{itemize}
+        \vspace{0.05cm}
+        \blk{Nhận xét} Tác động yếu hơn so với giao thông và khoảng cách.
+
+        \column{0.46\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{delay_rate_by_complexity_band.png}
+        \readfig{Tỷ lệ đơn trễ tăng dần theo độ phức tạp bếp.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{12. Chọn đặc trưng: Rút gọn hay Đầy đủ?}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Hai bộ đặc trưng}
@@ -338,12 +429,12 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{correlation_heatmap.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{correlation_heatmap.png}
         \readfig{Nhiều ô đỏ đậm = các biến tương quan mạnh, trùng thông tin.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{10. Bộ rút gọn thắng bộ đầy đủ}
+\begin{frame}{13. Bộ đặc trưng rút gọn chiếm ưu thế}
     \begin{columns}[T]
         \column{0.46\linewidth}
         \begin{table}
@@ -369,27 +460,44 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{11. So sánh sáu mô hình dự đoán}
+\begin{frame}{14. So sánh sáu mô hình dự đoán}
     \begin{columns}[T]
-        \column{0.5\linewidth}
+        \column{0.45\linewidth}
         \blk{Xếp hạng theo F2}
         \begin{itemize}
-            \item \textbf{Hồi quy Logistic:} F2 = 0.9434, MCC = 0.9117 — \textbf{tốt nhất} và dễ giải thích.
-            \item SVM (0.9048), Cây quyết định (0.8962): khá nhưng phức tạp hơn.
-            \item Rừng ngẫu nhiên (0.8780): học tủ mạnh.
-            \item k láng giềng (0.7538): yếu hơn rõ rệt.
+            \item \textbf{Logistic Regression} đạt hiệu năng cao nhất ($F2=0.9434$) và dễ giải thích.
+            \item Các mô hình phi tuyến phức tạp (SVM, RF) bị quá khớp hoặc kém ổn định.
+            \item \textbf{Quyết định:} Chọn Hồi quy Logistic làm mô hình cốt lõi.
         \end{itemize}
         \vspace{0.1cm}
-        \blk{Chốt} Chọn \textbf{Hồi quy Logistic} theo F2.
-
-        \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{model_comparison.png}
-        \readfig{Cụm cột của Hồi quy Logistic cao \& đều nhất.}
+        \includegraphics[width=0.95\linewidth,height=0.22\textheight,keepaspectratio]{model_comparison.png}
+        \readfig{F2-Score của các mô hình trên tập Dev.}
+
+        \column{0.55\linewidth}
+        \centering
+        \tiny
+        \setlength{\tabcolsep}{3pt}
+        \renewcommand{\arraystretch}{1.05}
+        \begin{table}
+        \caption{So sánh 6 thuật toán trên tập Dev}
+        \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Mô hình} & \textbf{Acc} & \textbf{Recall} & \textbf{F2} & \textbf{MCC} \\
+        \midrule
+        \textbf{Logistic Regression} & \textbf{0.9701} & \textbf{0.9524} & \textbf{0.9434} & \textbf{0.9117} \\
+        SVM & 0.9701 & 0.9048 & 0.9135 & 0.9085 \\
+        Cây quyết định & 0.9502 & 0.9048 & 0.8962 & 0.8525 \\
+        Rừng ngẫu nhiên & 0.9652 & 0.8571 & 0.8780 & 0.8926 \\
+        k-NN & 0.9353 & 0.7143 & 0.7538 & 0.7970 \\
+        Naive Bayes & 0.6368 & 0.8571 & 0.6642 & 0.3544 \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
     \end{columns}
 \end{frame}
 
-\begin{frame}{12. Vì sao không chọn Naive Bayes?}
+\begin{frame}{15. Vì sao không chọn Naive Bayes?}
     \begin{columns}[T]
         \column{0.54\linewidth}
         \blk{Điểm số thấp hẳn}
@@ -413,31 +521,44 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{13. Tinh chỉnh siêu tham số}
+\begin{frame}{16. Tinh chỉnh siêu tham số Hồi quy Logistic}
     \begin{columns}[T]
-        \column{0.54\linewidth}
-        \blk{Quy tắc: chọn xong mới tinh chỉnh}
+        \column{0.41\linewidth}
+        \blk{Quy trình tinh chỉnh}
         \begin{itemize}
-            \item Chỉ tinh chỉnh \textbf{sau khi} Hồi quy Logistic đã thắng vòng so sánh.
-            \item Dò tham số trên tập huấn luyện bằng kiểm định chéo 5 phần, tối ưu theo F2.
+            \item Dò nghịch đảo điều chuẩn $C$ bằng CV 5-Fold.
+            \item CV tối ưu tại $C=0.3$ với F2 $0.9437$ (mặc định $0.9387$).
         \end{itemize}
-        \vspace{0.15cm}
-        \blk{Kết quả \& quyết định}
+        \vspace{0.05cm}
+        \blk{Kiểm tra tập Dev}
         \begin{itemize}
-            \item Bản tinh chỉnh lại cho F2 \textbf{thấp hơn} bản gốc trên tập kiểm định.
-            \item Vì vậy \textbf{giữ cấu hình gốc} — minh bạch, không ép theo kiểm định chéo khi tập kiểm định nói ngược.
+            \item Bản $C=0.3$ giảm F2 xuống $0.8894$ (bị overfit).
+            \item \textbf{Quyết định:} Giữ mặc định $C=1.0$ để đảm bảo tổng quát hóa.
         \end{itemize}
 
-        \column{0.44\linewidth}
+        \column{0.57\linewidth}
         \centering
-        \footnotesize
-        \blk{Thông điệp}\par\vspace{4pt}
-        Tinh chỉnh không phải lúc nào cũng tốt hơn. Nhóm báo cáo \textbf{trung
-        thực} rằng bản gốc tốt hơn và giữ nó.
+        \tiny
+        \setlength{\tabcolsep}{3pt}
+        \renewcommand{\arraystretch}{0.95}
+        \textbf{Bảng: So sánh cấu hình Mặc định vs Tinh chỉnh}\par\vspace{3pt}
+        \begin{tabular}{lcc}
+        \toprule
+        \textbf{Chỉ số (Metric)} & \textbf{Mặc định ($C=1.0$)} & \textbf{Tinh chỉnh ($C=0.3$)} \\
+        \midrule
+        F2 CV (Mean $\pm$ Std) & $0.9387 \pm 0.0323$ & $\mathbf{0.9437 \pm 0.0375}$ \\
+        F2 Dev (Chỉ số chính) & $\mathbf{0.9434}$ & $0.8894$ \\
+        Accuracy Dev & $\mathbf{0.9701}$ & $0.9602$ \\
+        Precision / Recall Dev & $0.9091$ / $\mathbf{0.9524}$ & $\mathbf{0.9250}$ / $0.8810$ \\
+        Ma trận nhầm lẫn & $155 / 4 / 2 / 40$ & $156 / 3 / 5 / 37$ \\
+        \midrule
+        \textbf{Quyết định} & \textbf{CHỌN (Locked)} & LOẠI (Rejected) \\
+        \bottomrule
+        \end{tabular}
     \end{columns}
 \end{frame}
 
-\begin{frame}{14. Quét ngưỡng quyết định}
+\begin{frame}{17. Quét ngưỡng quyết định phân loại}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Quét ngưỡng trên tập kiểm định}
@@ -454,12 +575,12 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{fbeta_threshold_curve.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{fbeta_threshold_curve.png}
         \readfig{Đường F2 phẳng ở vùng ngưỡng thấp — dễ học tủ theo tập kiểm định.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{15. Kiểm thử độ ổn định (100 lần chia tập)}
+\begin{frame}{18. Kiểm thử độ ổn định (100 lần chia tập)}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Mục tiêu}
@@ -476,12 +597,12 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{model_stability_f2_distribution.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{model_stability_f2_distribution.png}
         \readfig{Phân phối F2 qua 100 lần chia tập, tụm quanh 0.94.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{16. Kết quả kiểm thử so với baseline}
+\begin{frame}{19. Kết quả kiểm thử so với baseline}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Hồi quy Logistic (kiểm thử)}
@@ -518,26 +639,63 @@
 % PHẦN III — TỪ DỰ ĐOÁN ĐẾN QUYẾT ĐỊNH
 % =====================================================================
 
-\begin{frame}{17. Điểm rủi ro: công thức tính (0--100)}
-    \blk{Ý tưởng} Người điều phối không thể quyết chỉ bằng một con số xác suất khó
-    hiểu. Ta kết hợp dự đoán của mô hình với \textbf{áp lực vận hành} thực tế thành
-    một điểm rủi ro rõ ràng.
-    \vspace{0.25cm}
-    \begin{equation*}
-    \begin{aligned}
-        \text{Rủi ro} =\ & 0.55\,S_{\text{mô hình}} + 0.15\,S_{\text{giao thông}} + 0.12\,S_{\text{quãng đường}} \\
-             &+\, 0.08\,S_{\text{cao điểm}} + 0.06\,S_{\text{phức tạp}} + 0.04\,S_{\text{cuối tuần}}
-    \end{aligned}
-    \end{equation*}
-    \vspace{0.1cm}
+% =====================================================================
+% PHẦN III — TỪ DỰ ĐOÁN ĐẾN QUYẾT ĐỊNH
+% =====================================================================
+
+\begin{frame}{20. Đối chiếu: Điểm rủi ro DSS vs. Xác suất mô hình}
+    \begin{table}
+        \centering\footnotesize
+        \renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{p{2.3cm}p{5.1cm}p{5.1cm}}
+        \toprule
+        \textbf{Tiêu chí} & \textbf{Xác suất mô hình ML} & \textbf{Điểm rủi ro DSS (Đề xuất)} \\
+        \midrule
+        \blk{Bản chất} & Dự đoán thống kê thuần túy từ dữ liệu lịch sử (hộp đen). & Trộn lẫn dự báo mô hình (55\%) và áp lực vận hành thực tế (45\%). \\
+        \blk{Độ giải thích} & Thấp (chỉ đưa ra một con số xác suất trễ chung chung). & Cao (bóc tách rõ đóng góp của cự ly, giao thông, giờ cao điểm, v.v.). \\
+        \blk{Tính thích ứng} & Kém (cần thu thập dữ liệu và huấn luyện lại nếu đổi quy trình). & Rất cao (chỉ cần điều chỉnh trọng số cấu hình chính sách vận hành). \\
+        \blk{Dẫn dắt hành động} & Khó gán trực tiếp vì thiếu ngữ cảnh và ngưỡng linh hoạt. & Phân nhóm rõ ràng (Thấp/Vừa/Cao) để gán tài xế và đẩy hàng đợi bếp. \\
+        \bottomrule
+        \end{tabular}
+    \end{table}
+    \vspace{-0.1cm}
     \begin{itemize}
-        \item Mỗi thành phần được đưa về \textbf{thang 0--100} rồi mới nhân trọng số.
-        \item Dự đoán của mô hình chiếm \textbf{55\%} (bằng chứng chính); 45\% còn lại là áp lực vận hành minh bạch.
-        \item Đây là \textbf{chính sách do nhóm đặt}, không phải con số tối ưu thống kê.
+        \item \textbf{Ý nghĩa cốt lõi:} Điểm rủi ro là công cụ \textbf{hỗ trợ quyết định} mang tính thực tế, giải quyết triệt để vấn đề phản ứng chậm và sự thiếu minh bạch của mô hình AI hộp đen.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{18. Điểm rủi ro: bóc tách thành phần}
+\begin{frame}{21. Điểm rủi ro: công thức tính (0--100)}
+    \begin{columns}[T]
+        \column{0.5\linewidth}
+        \blk{Nguyên tắc thiết kế bộ lọc rủi ro}
+        \begin{itemize}
+            \item \textbf{Mô hình ML là cốt lõi (55\%):} Kế thừa khả năng dự báo từ dữ liệu lịch sử tốt nhất của Logistic Regression.
+            \item \textbf{Tích hợp áp lực (45\%):} Bù đắp các yếu tố động thời gian thực (giao thông, cuối tuần, độ phức tạp đơn).
+            \item \textbf{Tính giải thích cao:} Từng điểm số đều có thể bóc tách rõ ràng nguồn gốc phát sinh để tăng sự tin cậy.
+        \end{itemize}
+
+        \column{0.48\linewidth}
+        \blk{Công thức tính toán (0--100)}
+        {\scriptsize
+        \begin{equation*}
+        \begin{aligned}
+            \text{Rủi ro} = {} & 0.55 \times S_{\text{mô hình}} \\
+            & + 0.15 \times S_{\text{giao thông}} \\
+            & + 0.12 \times S_{\text{quãng đường}} \\
+            & + 0.08 \times S_{\text{cao điểm}} \\
+            & + 0.06 \times S_{\text{phức tạp}} \\
+            & + 0.04 \times S_{\text{cuối tuần}}
+        \end{aligned}
+        \end{equation*}
+        }
+        \vspace{-0.15cm}
+        \begin{itemize}\scriptsize
+            \item Dự đoán mô hình chiếm \textbf{55\%} (bằng chứng chính); \textbf{45\%} còn lại là các chỉ số vận hành thực tế.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{22. Điểm rủi ro: bóc tách thành phần}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Vì sao phải bóc tách?}
@@ -554,12 +712,12 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{risk_component_breakdown.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{risk_component_breakdown.png}
         \readfig{Mức đóng góp trung bình của từng thành phần vào điểm rủi ro.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{19. Hiệu chuẩn điểm rủi ro}
+\begin{frame}{23. Hiệu chuẩn điểm rủi ro}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Điểm rủi ro có ``đúng'' không?}
@@ -577,12 +735,12 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{risk_calibration.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{risk_calibration.png}
         \readfig{Đường tỷ lệ trễ thực tế đi lên đều theo nhóm.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{20. Độ nhạy của ngưỡng ưu tiên}
+\begin{frame}{24. Độ nhạy của ngưỡng ưu tiên}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Ngưỡng phân nhóm}
@@ -599,12 +757,12 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{priority_threshold_sensitivity.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{priority_threshold_sensitivity.png}
         \readfig{Số đơn nhóm cao \& số đơn trễ bắt được đổi theo ngưỡng.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{21. Hàng đợi ưu tiên \& hành động}
+\begin{frame}{25. Hàng đợi ưu tiên \& hành động}
     \begin{center}\small Điểm rủi ro được dịch thành hành động cụ thể cho người điều phối:\end{center}
     \vspace{-2pt}
     \begin{table}
@@ -625,23 +783,27 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{22. Xếp tài xế: bài toán phân công}
+\begin{frame}{26. Xếp tài xế: bài toán phân công}
     \begin{columns}[T]
-        \column{0.5\linewidth}
+        \column{0.52\linewidth}
         \blk{Mô hình hoá}
         \begin{itemize}
             \item Lấy các đơn rủi ro cao từ hàng đợi (dữ liệu thật).
-            \item Giả lập một đội tài xế: sức chở, vị trí xuất phát.
-            \item Lập bảng chi phí: phạt khi đơn trễ không kịp giao, thưởng khi đi cùng tuyến.
-            \item Giải tối ưu toàn cục bằng thuật toán phân công Hungary.
+            \item Giả lập đội tài xế: sức chở, vị trí xuất phát.
+            \item Lập bảng chi phí: phạt trễ đơn, thưởng đi chung tuyến.
+            \item Tối ưu bằng giải thuật Hungary (Hungarian Algorithm).
         \end{itemize}
-        \vspace{0.1cm}
-        \blk{Kết quả} Xếp \textbf{12 đơn} rủi ro cao cho \textbf{6 tài xế}, chi phí trung bình thấp nhất \textbf{32,84} — minh hoạ tầng đề xuất hành động.
+        \vspace{0.05cm}
+        \blk{Kết quả thực nghiệm}
+        \begin{itemize}
+            \item Phân phối thành công \textbf{12 đơn} cho \textbf{6 tài xế}.
+            \item Chi phí trung bình đạt tối ưu \textbf{32,84}.
+        \end{itemize}
 
-        \column{0.48\linewidth}
+        \column{0.46\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{transport_assignment_cost.png}
-        \readfig{Chi phí xếp theo từng cặp đơn--tài xế.}
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{transport_assignment_cost.png}
+        \readfig{Ma trận chi phí xếp giữa đơn hàng và tài xế.}
     \end{columns}
 \end{frame}
 
@@ -649,7 +811,7 @@
 % PHẦN IV — MỞ RỘNG & TRÌNH BÀY
 % =====================================================================
 
-\begin{frame}{23. \mr Hành vi khách hàng}
+\begin{frame}{27. \mr Phân tích hành vi khách hàng}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Cỡ bánh \& loại bánh}
@@ -658,18 +820,80 @@
             \item \textbf{Loại bánh:} mặn và chay chiếm đa số.
             \item \textbf{Topping:} chủ yếu 2--5 topping mỗi đơn.
         \end{itemize}
-        \vspace{0.12cm}
-        \blk{Lưu ý} Đây là dữ liệu giả lập — chỉ minh hoạ cách phân tích hành vi,
-        \textbf{không} kết luận thị hiếu thật.
+        \vspace{0.08cm}
+        \blk{Lưu ý} Đây là dữ liệu giả lập — chỉ minh hoạ cách phân tích hành vi, \textbf{không} kết luận thị hiếu thật.
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{size_preference.png}
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{size_preference.png}
         \readfig{Tỷ trọng đặt hàng theo cỡ bánh.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{24. \mr Dự báo nhu cầu theo tháng}
+\begin{frame}{28. \mr Phân cụm đơn hàng bằng K-Means}
+    \begin{columns}[T]
+        \column{0.58\linewidth}
+        \blk{Thiết lập thuật toán}
+        \begin{itemize}
+            \item Phân cụm đặc trưng đơn hàng bằng K-Means.
+            \item Chỉ số Silhouette tối ưu tại số cụm $K=4$.
+        \end{itemize}
+        \vspace{0.05cm}
+        \blk{Đặc trưng 4 cụm đơn hàng}
+        \begin{table}
+        \centering\tiny
+        \renewcommand{\arraystretch}{1.02}
+        \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Cụm} & \textbf{Tỷ lệ} & \textbf{Cự ly} & \textbf{Đặc tính} & \textbf{Tỷ lệ trễ} \\
+        \midrule
+        Cụm 0 & $44{,}6\%$ & $4{,}9$ km & Cỡ Medium, đường đông vừa & $11{,}61\%$ \\
+        \color{red}\textbf{Cụm 1} & $24{,}5\%$ & $7{,}5$ km & Cỡ XL, nhiều toppings, đường đông & \textbf{63,82\%} \\
+        Cụm 2 & $25{,}8\%$ & $3{,}0$ km & Cỡ Medium, ít toppings, đường thoáng & $0{,}39\%$ \\
+        Cụm 3 & $5{,}1\%$ & $3{,}5$ km & Cỡ Medium, đường rất đông & $0\%$ \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+
+        \column{0.40\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{kmeans_silhouette.png}
+        \readfig{Giá Silhouette đạt đỉnh tại 4 cụm.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{29. \mr Khai phá luật kết hợp Apriori}
+    \begin{columns}[T]
+        \column{0.58\linewidth}
+        \blk{Mối liên kết dẫn đến trễ đơn (delayed=True)}
+        \begin{itemize}
+            \item Dùng giải thuật Apriori tìm các luật kết hợp gây trễ.
+        \end{itemize}
+        \vspace{0.05cm}
+        \blk{Các luật kết hợp nổi bật (Lift > 2.0)}
+        \begin{table}
+        \centering\tiny
+        \renewcommand{\arraystretch}{1.02}
+        \begin{tabular}{p{2.1cm}ccc}
+        \toprule
+        \textbf{Vế trước (Antecedent)} & \textbf{Tin cậy} & \textbf{Lift} & \textbf{Ý nghĩa vận hành} \\
+        \midrule
+        $\text{distance}=\text{high}$ & \textbf{100\%} & $4{,}78$ & Đi xa luôn gây trễ \\
+        $\text{size}=\text{Large}, \text{traffic}=\text{High}$ & \textbf{73{,}53\%} & $3{,}52$ & Bánh lớn + đường tắc \\
+        $\text{toppings}=\text{high}, \text{traffic}=\text{High}$ & \textbf{58{,}80\%} & $2{,}81$ & Nhiều toppings + tắc \\
+        $\text{traffic}=\text{High}$ & \textbf{50{,}30\%} & $2{,}41$ & Nửa số đơn giờ tắc bị trễ \\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+
+        \column{0.40\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{association_lift_top.png}
+        \readfig{Top các luật kết hợp có Lift cao nhất.}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{30. \mr Dự báo nhu cầu theo tháng}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Cách làm}
@@ -685,40 +909,40 @@
 
         \column{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{monthly_demand_forecast.png}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{monthly_demand_forecast.png}
         \readfig{Đường dự báo (cam) bám trễ theo thực tế (xanh).}
     \end{columns}
 \end{frame}
 
-\begin{frame}{25. \mr Xếp ca theo giờ \& xu hướng sở thích}
+\begin{frame}{31. \mr Xếp ca theo giờ \& xu hướng sở thích}
     \begin{columns}[T]
-        \column{0.5\linewidth}
+        \column{0.52\linewidth}
         \blk{Xếp ca theo giờ}
         \begin{itemize}
             \item Cao điểm rơi vào \textbf{19h} hằng ngày.
             \item Đề xuất tăng nhân lực bếp giờ cao điểm thay vì rải đều.
         \end{itemize}
-        \vspace{0.12cm}
+        \vspace{0.05cm}
         \blk{Xu hướng cỡ/loại bánh}
         \begin{itemize}
-            \item Dự báo tỷ trọng đặt hàng từng cỡ/loại trong các tháng tới.
-            \item Có vài xu hướng ``có ý nghĩa'', nhưng do dữ liệu giả lập nên phải coi là \textbf{đặc tính của bộ sinh dữ liệu}, không phải thị hiếu thật.
+            \item Dự báo tỷ trọng đặt hàng từng cỡ/loại.
+            \item Chỉ mang tính chất minh họa phương pháp, do dữ liệu gốc được sinh lập tự động.
         \end{itemize}
 
-        \column{0.48\linewidth}
+        \column{0.46\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{preference_size_share_forecast.png}
+        \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{preference_size_share_forecast.png}
         \readfig{Tỷ trọng các cỡ bánh theo tháng + đoạn dự báo.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{26. Đối chiếu rubric chấm điểm môn học}
-    \begin{center}\small Bốn nhóm yêu cầu của phiếu chấm — dự án phủ ở các phần sau:\end{center}
-    \vspace{-2pt}
+\begin{frame}{32. Đối chiếu rubric chấm điểm môn học}
+    \begin{center}\footnotesize Bốn nhóm yêu cầu của phiếu chấm — dự án phủ ở các phần sau:\end{center}
+    \vspace{-0.1cm}
     \begin{table}
         \centering
-        \footnotesize
-        \renewcommand{\arraystretch}{1.2}
+        \scriptsize
+        \renewcommand{\arraystretch}{1.05}
         \begin{tabular}{p{3.7cm}p{6.6cm}p{1.9cm}}
         \toprule
         \textbf{Nhóm yêu cầu} & \textbf{Dự án thể hiện} & \textbf{Trạng thái}\\
@@ -731,144 +955,111 @@
         \bottomrule
         \end{tabular}
     \end{table}
-    \vspace{2pt}
-    \begin{center}\footnotesize\itshape Chi tiết đối chiếu 20 mục: xem Bảng 7.1 trong báo cáo.\end{center}
+    \vspace{-0.1cm}
+    \begin{center}\tiny\itshape Chi tiết đối chiếu 20 mục: xem Bảng 7.1 trong báo cáo.\end{center}
 \end{frame}
 
-\begin{frame}{27. Bảng điều khiển — tổng quan \& khám phá}
+\begin{frame}{33. Bảng điều khiển Streamlit — Tổng quan \& Khám phá}
     \begin{columns}[T]
         \column{0.45\linewidth}
-        \blk{Trang tổng quan}
+        \blk{Giao diện tổng quan}
         \begin{itemize}
-            \item Theo dõi nhanh: số đơn, tỷ lệ trễ, số đơn rủi ro cao cần can thiệp.
+            \item Hiển thị nhanh các chỉ số vận hành quan trọng: tổng số đơn, tỷ lệ trễ trung bình, số lượng đơn rủi ro cần xử lý.
         \end{itemize}
         \vspace{0.12cm}
-        \blk{Trang khám phá dữ liệu}
+        \blk{Khám phá dữ liệu nghiệp vụ}
         \begin{itemize}
-            \item Lọc tỷ lệ trễ theo từng yếu tố (giao thông, cỡ bánh, cửa hàng).
-            \item Bảng \& biểu đồ trực quan cho người điều phối.
+            \item Lọc trực quan tỷ lệ trễ theo từng thuộc tính (nhà hàng, cự ly, thời gian, loại bánh).
+            \item Giúp người điều phối hiểu rõ bức tranh vận hành động.
         \end{itemize}
 
         \column{0.53\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{dashboard_overview.jpg}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{dashboard_overview.jpg}
+        \readfig{Màn hình tổng quan Streamlit hỗ trợ theo dõi hiệu năng vận hành.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{28. Bảng điều khiển — ra quyết định \& chất lượng dữ liệu}
+\begin{frame}{34. Bảng điều khiển Streamlit — Điều hành \& Kiểm soát}
     \begin{columns}[T]
         \column{0.45\linewidth}
-        \blk{Trang thử một đơn}
+        \blk{Tính năng cốt lõi}
         \begin{itemize}
-            \item Nhập một đơn mới, hệ thống hiện điểm rủi ro \& \textbf{bóc tách} từng thành phần.
-        \end{itemize}
-        \vspace{0.1cm}
-        \blk{Trang hàng đợi}
-        \begin{itemize}
-            \item Danh sách đơn ưu tiên kèm gợi ý xếp tài xế.
-        \end{itemize}
-        \vspace{0.1cm}
-        \blk{Trang chất lượng dữ liệu}
-        \begin{itemize}
-            \item Hiện trực tiếp cảnh báo dữ liệu giả lập để kiểm duyệt.
+            \item \textbf{Thử nghiệm đơn hàng:} Nhập thông tin đơn mới, tính điểm rủi ro tức thời và bóc tách cấu trúc điểm.
+            \item \textbf{Hàng đợi ưu tiên:} Tự động xếp các đơn rủi ro lên đầu và đề xuất gán tài xế tối ưu giải bằng Hungary.
+            \item \textbf{Cảnh báo chất lượng dữ liệu:} Nhận diện trực quan các dấu hiệu dữ liệu giả lập/bị lặp.
         \end{itemize}
 
         \column{0.53\linewidth}
         \centering
-        \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{dashboard_single_order.jpg}
+        \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{dashboard_single_order.jpg}
+        \readfig{Giao diện điều phối gán tài xế tối ưu theo thời gian thực.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{29. Bộ dữ liệu báo cáo \& khả năng tái lập}
+\begin{frame}{35. Vận hành hệ thống \& Khả năng tái lập}
     \begin{columns}[T]
         \column{0.52\linewidth}
-        \blk{Bộ dữ liệu cho Power BI}
+        \blk{Báo cáo Power BI}
         \begin{itemize}
-            \item Các bảng dữ liệu sạch kèm công thức tính sẵn.
-            \item Có hướng dẫn nạp dữ liệu \& dựng từng trang báo cáo.
+            \item Cung cấp các bảng dữ liệu sạch đã được chuẩn hóa kèm công thức tính sẵn để dựng báo cáo phân tích sâu.
         \end{itemize}
-        \vspace{0.12cm}
-        \blk{Tái lập hoàn toàn}
+        \vspace{0.1cm}
+        \blk{Đóng gói và Tái lập tự động}
         \begin{itemize}
-            \item Một lệnh dựng lại toàn bộ kết quả (chạy đủ 18 bước).
-            \item Bộ kiểm thử tự động chạy đạt toàn bộ.
+            \item Tải và chạy trọn vẹn quy trình 18 bước xử lý dữ liệu và mô hình chỉ bằng một lệnh duy nhất.
+            \item Tích hợp Unit Test tự động chạy đạt 100\% các ca kiểm thử logic nghiệp vụ.
         \end{itemize}
 
         \column{0.46\linewidth}
-        \blk{Các bước chạy}
+        \blk{Lệnh vận hành chi tiết}
         \begin{block}{}
         \scriptsize
         \texttt{python -m scripts.run\_all}\\
         \texttt{python -m unittest discover -s tests}\\
         \texttt{streamlit run app/streamlit\_app.py}
         \end{block}
-        \footnotesize\itshape Mọi số liệu sinh ở một nơi; báo cáo và slide chỉ đọc
-        lại để trình bày.
+        \footnotesize\itshape Mọi số liệu sinh từ một nguồn duy nhất; đảm bảo tính đồng bộ và khả năng chuyển giao nhanh.
     \end{columns}
 \end{frame}
 
-\begin{frame}{30. Câu hỏi phản biện (1/2)}
-    \begin{itemize}
-        \item \textbf{Vì sao không dùng thời gian giao làm đặc trưng?}\\
-              Đó là thông tin chỉ có sau khi giao; nó quyết định nhãn trễ nên dùng sẽ gây \textbf{rò rỉ} (điểm ảo).
-        \vspace{0.3cm}
-        \item \textbf{Ngưỡng trễ 30 phút ở đâu ra?}\\
-              \textbf{Dò tự động} trên dữ liệu cho thấy khớp tuyệt đối tại mốc này, không phải nhóm tự đặt.
-        \vspace{0.3cm}
-        \item \textbf{Vì sao không chia tập theo thời gian?}\\
-              20\% cuối theo thời gian \textbf{không có đơn trễ nào} nên không kiểm thử được; nhóm dùng cách chia giữ nguyên tỷ lệ lớp và ghi rõ giới hạn.
-    \end{itemize}
-\end{frame}
 
-\begin{frame}{31. Câu hỏi phản biện (2/2)}
-    \begin{itemize}
-        \item \textbf{Điểm 96\% có nghĩa mô hình ``giỏi'' ngoài đời?}\\
-              Không. Cao là vì dữ liệu gần như cố định (giả lập). Giá trị thật của đồ án là \textbf{quy trình \& truy vết}, không phải con số.
-        \vspace{0.3cm}
-        \item \textbf{Điểm rủi ro \& xếp tài xế có tối ưu thật?}\\
-              Không. Điểm rủi ro là \textbf{chính sách trọng số minh bạch}; phần xếp tài xế dùng đội xe giả lập vì dữ liệu thiếu thông tin tài xế.
-        \vspace{0.3cm}
-        \item \textbf{Các phân tích mở rộng có tin được không?}\\
-              Chỉ là \textbf{minh hoạ quy trình}. Mọi kết luận đều kèm ghi chú ``do bộ sinh dữ liệu'', không áp cho thị trường thật.
-    \end{itemize}
-\end{frame}
 
-\begin{frame}{32. Giới hạn \& điều phải lưu ý}
+
+
+\begin{frame}{36. Giới hạn \& Lưu ý quan trọng}
     \begin{columns}[T]
         \column{0.48\linewidth}
-        \blk{Giới hạn dữ liệu}
+        \blk{Giới hạn kỹ thuật}
         \begin{itemize}
-            \item Dữ liệu \textbf{giả lập}, cỡ nhỏ (1.004 dòng).
-            \item Dự báo nhu cầu \& xu hướng chỉ minh hoạ cách làm.
-            \item Không có vị trí tài xế thật, không có phản hồi khách thật.
+            \item Tập dữ liệu gốc có nguồn gốc mô phỏng và quy mô nhỏ (1.004 đơn).
+            \item Các phân tích mở rộng phản ánh đặc tính của bộ sinh dữ liệu tự động, chưa đại diện cho thị trường thực tế.
+            \item Chưa có dữ liệu tọa độ GPS thực tế của tài xế để tối ưu hóa thời gian thực.
         \end{itemize}
 
         \column{0.48\linewidth}
-        \blk{Phải nói rõ khi trình bày}
+        \blk{Lưu ý khi thuyết trình}
         \begin{itemize}
-            \item Không quảng cáo điểm 96\% là năng lực dự đoán thật.
-            \item Không kết luận cửa hàng nào vận hành tốt hơn — chỉ là đặc tính bộ dữ liệu.
-            \item Điểm rủi ro chưa tối ưu theo chi phí kinh doanh thật.
+            \item Tránh thổi phồng độ chính xác 96\% của mô hình — đây là do dữ liệu giả lập có công thức cố định.
+            \item Điểm rủi ro và giải thuật xếp tài xế mang tính đề xuất chính sách, cần bổ sung chi phí tài chính thực tế trước khi ứng dụng thương mại.
         \end{itemize}
     \end{columns}
 \end{frame}
 
-\begin{frame}{33. Kết luận \& hướng phát triển}
+\begin{frame}{37. Kết luận \& Hướng phát triển}
     \begin{columns}[T]
         \column{0.48\linewidth}
-        \blk{Kết luận}
+        \blk{Kết quả đạt được}
         \begin{itemize}
-            \item Hoàn thành một hệ hỗ trợ quyết định \textbf{khép kín}: từ phân tích, dự đoán đến quyết định và xếp tài xế.
-            \item Kiểm soát rò rỉ \& truy vết dữ liệu chặt chẽ.
-            \item Chính sách quyết định minh bạch cho quản lý.
+            \item Xây dựng hệ thống hỗ trợ quyết định khép kín từ tiếp nhận đơn hàng, dự báo rủi ro đến đề xuất tối ưu hóa phân công tài xế.
+            \item Quy trình xử lý chặt chẽ, kiểm soát rò rỉ dữ liệu tốt và có khả năng truy vết dữ liệu cao.
         \end{itemize}
 
         \column{0.48\linewidth}
-        \blk{Hướng phát triển}
+        \blk{Định hướng tương lai}
         \begin{itemize}
-            \item Kết nối dữ liệu thật \& nhật ký vị trí tài xế.
-            \item Tích hợp chi phí kinh doanh thật để tinh chỉnh điểm rủi ro.
-            \item Tự động cập nhật trọng số theo phản hồi vận hành.
+            \item Kết nối cơ sở dữ liệu thực tế tại các chuỗi cửa hàng và tích hợp tọa độ GPS thời gian thực của tài xế.
+            \item Đưa chi phí tài chính trực tiếp (lương tài xế, phạt trễ đơn) vào làm hàm mục tiêu tối ưu cho thuật toán Hungary.
         \end{itemize}
     \end{columns}
 \end{frame}
