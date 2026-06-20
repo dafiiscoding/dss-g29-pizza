@@ -954,27 +954,74 @@ xếp hàng đợi.
 
 \section{Dò siêu tham số sau khi chọn model}
 
-Sau vòng model selection, dự án chỉ tune Logistic Regression theo nguyên tắc
-``select-then-tune'': chọn họ mô hình trước bằng dev/CV, rồi tinh chỉnh họ thắng.
-Tune cả sáu mô hình trên dataset nhỏ sẽ làm tăng số lần so sánh và dễ overfit
-dev. Logistic Regression cũng là model phù hợp tầng DSS vì cho xác suất ổn định
-và hệ số dễ giải thích hơn SVM/RF.
+Sau vòng model selection, dự án chỉ tune Logistic Regression theo nguyên tắc ``select-then-tune'': chọn họ mô hình trước bằng dev/CV, rồi tinh chỉnh họ thắng để tránh việc quá khớp (overfitting) do so sánh quá nhiều. 
 
-GridSearchCV chạy trên train với Stratified K-Fold, scoring F2, và lưới
-\code{C \in \{0.1, 0.3, 1, 3, 10\}} quanh giá trị mặc định \code{C=1.0}. Kết quả
-CV tốt nhất là \code{C=0.3}, nhưng khi refit trên train và so lại trên dev,
-phiên bản tuned kém default rõ rệt. Vì vậy model khóa vẫn giữ default
-\code{C=1.0}; test chỉ được báo sau quyết định này.
+\subsection{Cơ sở toán học của các tham số tinh chỉnh}
+
+Trong mô hình Hồi quy Logistic, xác suất trễ của đơn hàng được dự đoán thông qua hàm Sigmoid:
+\[
+p(x) = \sigma(w^T x + b) = \frac{1}{1 + e^{-(w^T x + b)}}
+\]
+Quá trình huấn luyện tìm kiếm trọng số $w$ và bias $b$ bằng cách tối ưu hàm mất mát Entropy chéo nhị phân có điều chuẩn $L_2$ (Ridge penalty):
+\[
+L(w, b) = - C \cdot \sum_{i=1}^M \left[ y_i \log(p(x_i)) + (1 - y_i) \log(1 - p(x_i)) \right] + \frac{1}{2} \sum_{j=1}^n w_j^2
+\]
+Trong đó, hai tham số cốt lõi được cấu hình và tinh chỉnh là:
+\begin{itemize}
+    \item \textbf{Hệ số nghịch đảo điều chuẩn $C$ ($C = 1/\lambda$):} Khống chế biên độ của các trọng số $w_j$ để kiểm soát trade-off giữa phương sai (variance) và độ chệch (bias).
+    \begin{itemize}
+        \item Khi $C$ lớn (ví dụ: $3{,}0$, $10{,}0$): Lực cản điều chuẩn yếu, mô hình cố gắng khớp sát dữ liệu huấn luyện, dễ gây quá khớp (overfitting - phương sai cao).
+        \item Khi $C$ nhỏ (ví dụ: $0{,}1$, $0{,}3$): Lực cản điều chuẩn mạnh, ép các hệ số $w_j$ về sát 0 để đơn giản hóa mô hình, ngăn ngừa quá khớp nhưng có thể gây lệch (underfitting - độ chệch cao).
+    \end{itemize}
+    \item \textbf{Trọng số lớp (\code{class\_weight='balanced'}):} Phạt lỗi sai trên lớp thiểu số nặng hơn để xử lý mất cân bằng lớp (chỉ $20{,}9\%$ đơn trễ). Trọng số cho lớp $c$ được tính theo công thức:
+    \[
+    W_c = \frac{M}{k \times M_c}
+    \]
+    với $M=1004$ (tổng số đơn), $k=2$ (số lớp), và $M_c$ là số đơn thuộc lớp $c$. Như vậy, lớp đúng giờ ($y=0$, $M_0=794$) nhận trọng số $W_0 \approx 0{,}63$, trong khi lớp trễ ($y=1$, $M_1=210$) nhận trọng số $W_1 \approx 2{,}39$. Trọng số này nhân trực tiếp vào thành phần hàm mất mát của lớp tương ứng, bắt buộc mô hình phải tập trung bắt các đơn trễ (tăng Recall).
+\end{itemize}
+
+\subsection{Quy trình và kết quả thực nghiệm từng bước}
+
+Quá trình tinh chỉnh được thực hiện tuần tự qua ba bước thực nghiệm:
+
+\begin{enumerate}
+    \item \textbf{Bước 1: Quét tham số chéo (Grid Search Cross-Validation):}
+    \begin{itemize}
+        \item Thiết lập lưới tham số quét: $C \in \{0{,}1; 0{,}3; 1{,}0; 3{,}0; 10{,}0\}$ và \code{penalty='l2'}.
+        \item Sử dụng kiểm định chéo 5 phần có phân tầng (\code{Stratified 5-Fold CV}) trên tập Huấn luyện (Train set) nhằm bảo toàn tỷ lệ lệch lớp 79:21. Chỉ số tối ưu hóa được đặt là $F_2$-score để ưu tiên Recall (giảm thiểu bỏ sót đơn trễ).
+        \item Kết quả CV trung bình của từng cấu hình (sắp xếp theo hiệu năng giảm dần):
+        \begin{enumerate}
+            \item $C=0{,}3$: CV $F_2$ trung bình = \textbf{0,9437} ($\pm 0{,}0375$) $\Rightarrow$ Cấu hình tối ưu nhất trên tập huấn luyện.
+            \item $C=1{,}0$ (Mặc định) và $C=3{,}0$: CV $F_2$ trung bình = \textbf{0,9387} ($\pm 0{,}0323$).
+            \item $C=0{,}1$: CV $F_2$ trung bình = \textbf{0,9368} ($\pm 0{,}0429$).
+            \item $C=10{,}0$: CV $F_2$ trung bình = \textbf{0,9337} ($\pm 0{,}0333$).
+        \end{enumerate}
+    \end{itemize}
+
+    \item \textbf{Bước 2: Thử nghiệm kiểm chứng trên tập Phát triển độc lập (Dev set):}
+    \begin{itemize}
+        \item Huấn luyện lại mô hình trên toàn bộ tập Train với cấu hình mặc định ($C=1.0$) và cấu hình tuned tốt nhất ($C=0.3$). Sau đó đánh giá song song trên tập Dev set để đo lường khả năng tổng quát hóa thực tế.
+        \item Mô hình mặc định ($C=1{,}0$) đạt: $F_2 = \textbf{0,9434}$, Accuracy $= 0{,}9701$, Precision $= 0{,}9091$, Recall $= 0{,}9524$, MCC $= 0{,}9117$. Ma trận nhầm lẫn: $155$ TN, $4$ FP, $2$ FN, $40$ TP (chỉ bỏ sót 2 đơn trễ).
+        \item Mô hình tuned ($C=0{,}3$) đạt: $F_2 = 0{,}8894$ (sụt giảm $0{,}0540$), Accuracy $= 0{,}9602$, Precision $= 0{,}9250$, Recall $= 0{,}8810$, MCC $= 0{,}8779$. Ma trận nhầm lẫn: $156$ TN, $3$ FP, $5$ FN, $37$ TP (bỏ sót đến 5 đơn trễ).
+    \end{itemize}
+
+    \item \textbf{Bước 3: Quyết định khóa mô hình (Model Locking):}
+    \begin{itemize}
+        \item Nguyên tắc chính sách: Chỉ chấp nhận sử dụng mô hình tuned nếu chỉ số $F_2$ trên tập Dev cải thiện ít nhất $0{,}01$ so với mặc định.
+        \item Đánh giá thực nghiệm: Kết quả của $C=0.3$ tốt hơn trong CV huấn luyện nhưng lại kém hơn đáng kể trên tập Dev độc lập do hiện tượng quá khớp vào cấu trúc phân chia fold.
+        \item Kết luận: Bác bỏ mô hình tuned ($C=0{,}3$), chính thức khóa mô hình mặc định ($C=1{,}0$) làm bộ phân loại cốt lõi. Đây là bằng chứng của quy trình thực nghiệm khách quan, khoa học và tránh việc lạc quan quá mức (over-optimism).
+    \end{itemize}
+\end{enumerate}
 
 \begin{table}[H]
 \centering
-\caption{So sánh Logistic Regression default và tuned trên dev}
-\begin{tabular}{lrrrrr}
+\caption{So sánh chi tiết Logistic Regression mặc định và tinh chỉnh trên tập Dev}
+\begin{tabular}{lrrrrrl}
 \toprule
-Biến thể & C & CV F2 mean & Dev F2 & Dev MCC & Quyết định\\
+Biến thể & C & CV F2 mean & Dev F2 & Dev Recall & Dev MCC & Quyết định\\
 \midrule
-Default LR & 1,0 & 0,9387 & 0,9434 & 0,9117 & Giữ\\
-Tuned LR & 0,3 & 0,9437 & 0,8894 & 0,8779 & Không dùng\\
+Default LR & 1,0 & 0,9387 & \textbf{0,9434} & \textbf{0,9524} & \textbf{0,9117} & \textbf{CHỌN (Khóa)}\\
+Tuned LR & 0,3 & \textbf{0,9437} & 0,8894 & 0,8810 & 0,8779 & BÁC BỎ (Loại)\\
 \bottomrule
 \end{tabular}
 \end{table}

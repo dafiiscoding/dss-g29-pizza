@@ -639,7 +639,42 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{19. Tinh chỉnh siêu tham số Hồi quy Logistic}
+\begin{frame}{19. Cơ sở toán học của các tham số tinh chỉnh}
+    \begin{columns}[T]
+        \column{0.5\linewidth}
+        \blk{Hàm mất mát điều chuẩn $L_2$ (Ridge)}
+        {\scriptsize
+        \[
+        L(w, b) = - C \sum_{i=1}^M \left[ y_i \log(p_i) + (1 - y_i) \log(1 - p_i) \right] + \frac{1}{2} \|w\|_2^2
+        \]
+        }
+        \begin{itemize}
+            \item \textbf{Tham số $C$ (Nghịch đảo của $\lambda$):}
+            \begin{itemize}\scriptsize
+                \item Điều tiết sức mạnh của lực cản phạt trọng số $\frac{1}{2} \|w\|_2^2$.
+                \item $C$ lớn (ví dụ: $3.0, 10.0$): Phạt yếu, khớp sát dữ liệu $\rightarrow$ Nguy cơ overfit.
+                \item $C$ nhỏ (ví dụ: $0.1, 0.3$): Phạt mạnh, ép trọng số về sát 0 $\rightarrow$ Ngăn ngừa overfit, tăng tính tổng quát hóa.
+            \end{itemize}
+        \end{itemize}
+
+        \column{0.48\linewidth}
+        \blk{Xử lý mất cân bằng lớp (Balanced Weight)}
+        \begin{itemize}
+            \item Vì dữ liệu lệch lớp ($79\%$ đúng giờ vs $21\%$ trễ), lỗi trên lớp thiểu số được nhân trọng số phạt nặng hơn.
+            \item Công thức trọng số lớp $c$:
+            {\scriptsize
+            \[
+            W_c = \frac{M}{2 \times M_c}
+            \]
+            }
+            \item \textbf{Lớp đúng giờ ($y=0$):} $W_0 \approx 0.63$.
+            \item \textbf{Lớp trễ ($y=1$):} $W_1 \approx 2.39$ (phạt lỗi trễ nặng gấp gần 4 lần).
+            \item \textbf{Kết quả:} Ép mô hình tối đa hóa Recall trên lớp trễ để đáp ứng mục tiêu nghiệp vụ.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{20. Tinh chỉnh siêu tham số Hồi quy Logistic}
     \begin{columns}[T]
         \column{0.41\linewidth}
         \blk{Quy trình tinh chỉnh}
@@ -678,7 +713,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{20. Quét ngưỡng quyết định phân loại}
+\begin{frame}{21. Quét ngưỡng quyết định phân loại}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Quét ngưỡng trên tập kiểm định}
@@ -700,7 +735,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{21. Kiểm thử độ ổn định (100 lần chia tập)}
+\begin{frame}{22. Kiểm thử độ ổn định (100 lần chia tập)}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Mục tiêu}
@@ -722,7 +757,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{22. Kết quả kiểm thử so với baseline}
+\begin{frame}{23. Kết quả kiểm thử so với baseline}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Hồi quy Logistic (kiểm thử)}
@@ -763,7 +798,7 @@
 % PHẦN III — TỪ DỰ ĐOÁN ĐẾN QUYẾT ĐỊNH
 % =====================================================================
 
-\begin{frame}{23. Đối chiếu: Điểm rủi ro DSS vs. Xác suất mô hình}
+\begin{frame}{24. Đối chiếu: Điểm rủi ro DSS vs. Xác suất mô hình}
     \begin{table}
         \centering\footnotesize
         \renewcommand{\arraystretch}{1.2}
@@ -784,7 +819,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{24. Điểm rủi ro: công thức tính (0--100)}
+\begin{frame}{25. Điểm rủi ro: công thức tính (0--100)}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Cách nhóm đặt trọng số}
@@ -837,7 +872,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{25. Điểm rủi ro: bóc tách thành phần}
+\begin{frame}{26. Điểm rủi ro: bóc tách thành phần}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Vì sao phải bóc tách?}
@@ -859,7 +894,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{26. Hiệu chuẩn điểm rủi ro}
+\begin{frame}{27. Hiệu chuẩn điểm rủi ro}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Điểm rủi ro có ``đúng'' không?}
@@ -882,7 +917,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{27. Độ nhạy của ngưỡng ưu tiên}
+\begin{frame}{28. Độ nhạy của ngưỡng ưu tiên}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Ngưỡng phân nhóm}
@@ -904,7 +939,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{28. Hàng đợi ưu tiên \& hành động}
+\begin{frame}{29. Hàng đợi ưu tiên \& hành động}
     \begin{center}\small Điểm rủi ro được dịch thành hành động cụ thể cho người điều phối:\end{center}
     \vspace{-2pt}
     \begin{table}
@@ -925,7 +960,7 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{29. Xếp tài xế: bài toán phân công}
+\begin{frame}{30. Xếp tài xế: bài toán phân công}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Mô hình hoá}
@@ -953,7 +988,7 @@
 % PHẦN IV — MỞ RỘNG & TRÌNH BÀY
 % =====================================================================
 
-\begin{frame}{30. \mr Phân tích hành vi khách hàng}
+\begin{frame}{31. \mr Phân tích hành vi khách hàng}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Cỡ bánh \& loại bánh}
@@ -972,7 +1007,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{31. \mr Phân cụm đơn hàng bằng K-Means}
+\begin{frame}{32. \mr Phân cụm đơn hàng bằng K-Means}
     \begin{columns}[T]
         \column{0.58\linewidth}
         \blk{Thiết lập thuật toán}
@@ -1004,7 +1039,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{32. \mr Khai phá luật kết hợp Apriori}
+\begin{frame}{33. \mr Khai phá luật kết hợp Apriori}
     \begin{columns}[T]
         \column{0.58\linewidth}
         \blk{Mối liên kết dẫn đến trễ đơn (delayed=True)}
@@ -1035,7 +1070,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{33. \mr Dự báo nhu cầu theo tháng}
+\begin{frame}{34. \mr Dự báo nhu cầu theo tháng}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Cách làm}
@@ -1056,7 +1091,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{34. \mr Xếp ca theo giờ \& xu hướng sở thích}
+\begin{frame}{35. \mr Xếp ca theo giờ \& xu hướng sở thích}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Xếp ca theo giờ}
@@ -1078,7 +1113,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{35. Đối chiếu rubric chấm điểm môn học}
+\begin{frame}{36. Đối chiếu rubric chấm điểm môn học}
     \begin{center}\footnotesize Bốn nhóm yêu cầu của phiếu chấm — dự án phủ ở các phần sau:\end{center}
     \vspace{-0.1cm}
     \begin{table}
@@ -1101,7 +1136,7 @@
     \begin{center}\tiny\itshape Chi tiết đối chiếu 20 mục: xem Bảng 7.1 trong báo cáo.\end{center}
 \end{frame}
 
-\begin{frame}{36. Bảng điều khiển Streamlit — Tổng quan \& Khám phá}
+\begin{frame}{37. Bảng điều khiển Streamlit — Tổng quan \& Khám phá}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Giao diện tổng quan}
@@ -1122,7 +1157,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{37. Bảng điều khiển Streamlit — Điều hành \& Kiểm soát}
+\begin{frame}{38. Bảng điều khiển Streamlit — Điều hành \& Kiểm soát}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Tính năng cốt lõi}
@@ -1139,7 +1174,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{38. Vận hành hệ thống \& Khả năng tái lập}
+\begin{frame}{39. Vận hành hệ thống \& Khả năng tái lập}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Báo cáo Power BI}
@@ -1169,7 +1204,7 @@
 
 
 
-\begin{frame}{39. Giới hạn \& Lưu ý quan trọng}
+\begin{frame}{40. Giới hạn \& Lưu ý quan trọng}
     \begin{columns}[T]
         \column{0.48\linewidth}
         \blk{Giới hạn kỹ thuật}
@@ -1188,7 +1223,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{40. Kết luận \& Hướng phát triển}
+\begin{frame}{41. Kết luận \& Hướng phát triển}
     \begin{columns}[T]
         \column{0.48\linewidth}
         \blk{Kết quả đạt được}
