@@ -117,17 +117,17 @@ def get_priority_level(risk_score):
 def recommend_action(order, priority):
     if priority == "High":
         return (
-            "Escalate to dispatch lead, prepare backup driver, and notify "
-            "customer support before the promised delivery window is missed."
+            "Ưu tiên xử lý ngay: báo điều phối trưởng, chuẩn bị tài xế dự phòng "
+            "và nhắn bộ phận chăm sóc khách hàng trước khi đơn trễ hẹn giao."
         )
     if priority == "Medium":
         return (
-            "Monitor driver assignment and traffic conditions; send proactive "
-            "customer update if ETA worsens."
+            "Theo dõi sát tài xế và tình hình giao thông; chủ động nhắn khách "
+            "nếu thời gian giao dự kiến (ETA) xấu đi."
         )
     if str(order["traffic_level"]) == "High":
-        return "Keep in normal queue but watch traffic because conditions are high."
-    return "Keep in normal delivery queue."
+        return "Giữ ở hàng đợi thường, nhưng để ý vì giao thông khu vực đang đông."
+    return "Giữ ở hàng đợi giao thường, không cần can thiệp đặc biệt."
 
 
 def get_dss_decision(order, delayed_probability):

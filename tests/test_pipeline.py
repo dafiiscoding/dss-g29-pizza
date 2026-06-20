@@ -122,7 +122,7 @@ class PizzaModelAndDecisionTests(unittest.TestCase):
         order["distance_km"] = 9.5
         decision = get_dss_decision(order, 0.95)
         self.assertEqual(decision["priority"], "High")
-        self.assertIn("backup driver", decision["recommended_action"])
+        self.assertIn("tài xế dự phòng", decision["recommended_action"])
 
     def test_risk_score_breakdown_matches_score(self):
         order = self.test.iloc[0].copy()

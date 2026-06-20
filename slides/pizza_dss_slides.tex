@@ -245,8 +245,8 @@
         \column{0.44\linewidth}
         \centering
         \footnotesize
-        \blk{Thông điệp cốt lõi}\par\vspace{4pt}
-        Hiệu năng cao là hệ quả từ cơ chế sinh số liệu cố định. Điểm giá trị của đồ án là quy trình xử lý và độ minh bạch của hệ hỗ trợ quyết định.
+        \blk{Thông điệp chính}\par\vspace{4pt}
+        Điểm cao một phần đến từ cách dữ liệu được sinh ra. Giá trị của đồ án nằm ở cách nhóm kiểm tra dữ liệu, chống leakage và biến kết quả dự báo thành quy trình điều phối.
     \end{columns}
 \end{frame}
 
@@ -323,7 +323,35 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{8. Mức độ trễ và Đặc trưng vận hành}
+\begin{frame}{8. Độ đo đánh giá: định nghĩa \& vì sao chọn}
+    \begin{columns}[T]
+        \column{0.56\linewidth}
+        \blk{Các thước đo dùng trong báo cáo}
+        \begin{itemize}\footnotesize
+            \item \textbf{Accuracy} — tỷ lệ đoán đúng trên tổng đơn. \emph{Bẫy}: đoán mọi đơn ``đúng giờ'' vẫn được $79\%$.
+            \item \textbf{Balanced Accuracy} — trung bình độ nhạy hai lớp $=\tfrac{1}{2}(\text{Recall}_{\text{trễ}}+\text{Recall}_{\text{đúng giờ}})$; không bị lớp đa số chi phối.
+            \item \textbf{Precision} $=\tfrac{TP}{TP+FP}$ — trong các đơn \emph{bị báo trễ}, bao nhiêu trễ thật.
+            \item \textbf{Recall} (độ nhạy) $=\tfrac{TP}{TP+FN}$ — bắt được bao nhiêu đơn trễ thật.
+            \item \textbf{F2} — trung bình điều hoà P \& R nhưng \textbf{coi trọng Recall gấp $\sim$2 lần}.
+            \item \textbf{MCC} — tương quan giữa nhãn thật và nhãn dự đoán; $1=$ hoàn hảo, $0=$ đoán mò, $-1=$ ngược hoàn toàn; dùng \textbf{cả 4 ô} ma trận nhầm lẫn.
+        \end{itemize}
+
+        \column{0.44\linewidth}
+        \blk{Vì sao chọn F2 \& MCC?}
+        \begin{itemize}\footnotesize
+            \item Dữ liệu lệch lớp ($\sim21\%$ trễ) $\Rightarrow$ Accuracy gây ảo giác.
+            \item Bỏ sót đơn trễ (FN) tốn kém hơn báo nhầm (FP) $\Rightarrow$ \textbf{ưu tiên Recall} $\Rightarrow$ chọn \textbf{F2} làm chỉ số tối ưu chính.
+            \item \textbf{MCC} làm ``trọng tài'' tổng thể: nếu mô hình chỉ giỏi đoán lớp đa số nhưng sai lớp trễ, MCC sẽ không cao.
+        \end{itemize}
+        \vspace{2pt}
+        {\scriptsize
+        \[ F_2=\frac{5\,P\,R}{4P+R},\;\;
+           \text{MCC}=\frac{TP\cdot TN-FP\cdot FN}{\sqrt{(TP{+}FP)(TP{+}FN)(TN{+}FP)(TN{+}FN)}} \]
+        }
+    \end{columns}
+\end{frame}
+
+\begin{frame}{9. Mức độ trễ và Đặc trưng vận hành}
     \begin{columns}[T]
         \column{0.54\linewidth}
         \blk{Phân nhóm mức độ trễ}
@@ -346,25 +374,58 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{9. Yếu tố gây trễ: giao thông đứng đầu}
+\begin{frame}{10A. Giao thông: bằng chứng từ dữ liệu}
     \begin{columns}[T]
-        \column{0.5\linewidth}
-        \blk{Mức độ giao thông}
+        \column{0.48\linewidth}
+        \blk{Tỷ lệ trễ theo traffic}
+        \begin{table}
+        \centering\footnotesize
+        \renewcommand{\arraystretch}{1.12}
+        \begin{tabular}{lrr}
+        \toprule
+        \textbf{Traffic} & \textbf{Số đơn} & \textbf{Tỷ lệ trễ}\\
+        \midrule
+        Low & 278 & 0,36\%\\
+        Medium & 398 & 11,06\%\\
+        \textbf{High} & 328 & \textbf{50,30\%}\\
+        \bottomrule
+        \end{tabular}
+        \end{table}
+        \vspace{-0.05cm}
         \begin{itemize}
-            \item Khi đường đông (mức cao), tỷ lệ trễ tăng vọt.
-            \item Mức vừa và thấp thì tỷ lệ trễ thấp hơn hẳn.
-            \item Giao thông là một thành phần của điểm rủi ro (Phần III).
-            \item Lưu ý: đây là tương quan, \textbf{không} khẳng định nhân quả.
+            \item Mức \textbf{High} có tỷ lệ trễ gấp khoảng \textbf{4,5 lần} Medium.
+            \item Mức Low gần như không trễ trong dữ liệu quan sát.
+            \item Đây là tín hiệu phân tách mạnh, dễ giải thích cho người điều phối.
         \end{itemize}
 
         \column{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{delay_rate_by_traffic.png}
-        \readfig{Tỷ lệ trễ theo mức giao thông: cao $\gg$ vừa $>$ thấp.}
+        \readfig{Biểu đồ xác nhận traffic High là nhóm rủi ro nổi bật nhất.}
     \end{columns}
 \end{frame}
 
-\begin{frame}{10. Yếu tố gây trễ: Quãng đường di chuyển}
+\begin{frame}{10B. Giao thông: ý nghĩa mô hình \& điều phối}
+    \begin{columns}[T]
+        \column{0.5\linewidth}
+        \blk{Vì sao đưa traffic vào feature?}
+        \begin{itemize}
+            \item Traffic biết được \textbf{trước khi giao}, nên hợp lệ cho dự báo sớm.
+            \item Mức traffic phản ánh thời gian di chuyển, khả năng kẹt xe và độ bất định ETA.
+            \item Được đưa vào mô hình bằng \textbf{one-hot encoding}; không ép giả định khoảng cách tuyến tính cứng giữa Low/Medium/High.
+        \end{itemize}
+
+        \column{0.48\linewidth}
+        \blk{Vì sao traffic có trong DSS Risk Score?}
+        \begin{itemize}
+            \item Ngoài xác suất mô hình, DSS cộng thêm \textbf{traffic pressure} để người điều phối thấy nguyên nhân rủi ro.
+            \item Chính sách điểm: Low=20, Medium=60, High=100; trọng số 0,15 trong Risk Score.
+            \item Lưu ý khi thuyết trình: đây là \textbf{tương quan vận hành}, không khẳng định quan hệ nhân quả tuyệt đối vì dữ liệu là synthetic.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{11. Yếu tố gây trễ: Quãng đường di chuyển}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Tương quan quãng đường}
@@ -388,7 +449,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{11. Yếu tố gây trễ: Độ phức tạp đơn hàng}
+\begin{frame}{12. Yếu tố gây trễ: Độ phức tạp đơn hàng}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Tác động khâu chuẩn bị bếp}
@@ -412,7 +473,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{12. Chọn đặc trưng: Rút gọn hay Đầy đủ?}
+\begin{frame}{13. Chọn đặc trưng: Rút gọn hay Đầy đủ?}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Hai bộ đặc trưng}
@@ -434,7 +495,59 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{13. Bộ đặc trưng rút gọn chiếm ưu thế}
+\begin{frame}{14. Đặc trưng đầu vào: 12 biến \& vai trò}
+    \begin{columns}[T]
+        \column{0.5\linewidth}
+        \blk{Biến số (4)}
+        \begin{itemize}\footnotesize
+            \item \textbf{distance\_km} — cự ly giao; yếu tố gây trễ mạnh nhất.
+            \item \textbf{toppings\_count} — số topping; phản ánh tải khâu làm bánh.
+            \item \textbf{pizza\_size\_score} — cỡ bánh mã hoá thứ bậc (1--4); thời gian nướng.
+            \item \textbf{order\_hour} — giờ đặt; bắt khung giờ cao điểm.
+        \end{itemize}
+        \vspace{0.1cm}
+        \blk{Nhãn mục tiêu}
+        \begin{itemize}\footnotesize
+            \item \textbf{is\_delayed} — đơn có trễ ($>30$ phút) hay không.
+        \end{itemize}
+
+        \column{0.5\linewidth}
+        \blk{Biến phân loại (8)}
+        \begin{itemize}\footnotesize
+            \item \textbf{traffic\_level} — mức giao thông; yếu tố trễ then chốt.
+            \item \textbf{is\_peak\_hour}, \textbf{is\_weekend} — cờ cao điểm / cuối tuần.
+            \item \textbf{order\_month} — mùa vụ theo tháng.
+            \item \textbf{restaurant\_name}, \textbf{location} — cửa hàng \& khu vực giao.
+            \item \textbf{pizza\_type} — loại bánh (mặn/chay/\dots).
+            \item \textbf{payment\_category} — nhóm hình thức thanh toán.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{15. Feature Engineering: làm gì \& vì sao}
+    \begin{columns}[T]
+        \column{0.52\linewidth}
+        \blk{Các bước biến đổi đặc trưng}
+        \begin{itemize}\footnotesize
+            \item \textbf{Mã hoá thứ bậc cỡ bánh:} pizza\_size $\to$ pizza\_size\_score (Small$=1$ \dots\ XL$=4$).
+            \item \textbf{Chuẩn hoá số} (StandardScaler) $+$ \textbf{One-Hot} biến phân loại, gói trong ColumnTransformer.
+            \item \textbf{Fit chỉ trên tập train} (đặt trong Pipeline) $\Rightarrow$ chống rò rỉ.
+            \item \textbf{Gộp} payment\_method $\to$ payment\_category để bớt phân mảnh.
+        \end{itemize}
+
+        \column{0.48\linewidth}
+        \blk{Vì sao làm vậy?}
+        \begin{itemize}\footnotesize
+            \item Cỡ bánh có thứ tự tự nhiên $\Rightarrow$ mã thứ bậc giữ quan hệ đơn điệu, ít cột hơn one-hot.
+            \item Logistic Regression nhạy với thang đo \& điều chuẩn $\Rightarrow$ cần chuẩn hoá.
+            \item \textbf{Loại 5 biến rò rỉ} (chỉ biết sau khi giao) và \textbf{4 biến tất định/trùng} (estimated\_duration $=2{,}4\times$distance, topping\_density, pizza\_complexity, traffic\_impact).
+            \item Không dùng \textbf{delivery\_time $-$ delay\_min}: cả hai đều là thông tin sau giao; dùng vào dự báo là cho mô hình xem trước đáp án.
+            \item Bỏ biến trùng $\Rightarrow$ tránh đa cộng tuyến: \textbf{17 biến $\to$ 12 biến} gọn và dễ giải thích hơn.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{16. Bộ đặc trưng rút gọn chiếm ưu thế}
     \begin{columns}[T]
         \column{0.46\linewidth}
         \begin{table}
@@ -454,20 +567,20 @@
         \blk{Đọc bảng}
         \begin{itemize}
             \item Bộ rút gọn \textbf{cao hơn} ở cả F2 lẫn MCC dù dùng ít biến hơn.
-            \item Khẳng định: bỏ biến trùng thông tin \textbf{không làm giảm} sức dự đoán, mà còn giúp mô hình ổn định, dễ giải thích.
+            \item Bỏ biến trùng thông tin \textbf{không làm giảm} sức dự đoán; kết quả còn nhỉnh hơn trên dev.
             \item Vì vậy khoá lại \textbf{bộ rút gọn 12 biến} cho các bước sau.
         \end{itemize}
     \end{columns}
 \end{frame}
 
-\begin{frame}{14. So sánh sáu mô hình dự đoán}
+\begin{frame}{17. Bảng tổng hợp so sánh 6 mô hình}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Xếp hạng theo F2}
         \begin{itemize}
             \item \textbf{Logistic Regression} đạt hiệu năng cao nhất ($F2=0.9434$) và dễ giải thích.
-            \item Các mô hình phi tuyến phức tạp (SVM, RF) bị quá khớp hoặc kém ổn định.
-            \item \textbf{Quyết định:} Chọn Hồi quy Logistic làm mô hình cốt lõi.
+            \item SVM và Random Forest có điểm tốt nhưng Recall/F2 thấp hơn.
+            \item \textbf{Quyết định:} Chọn Hồi quy Logistic làm mô hình chính.
         \end{itemize}
         \vspace{0.1cm}
         \centering
@@ -480,7 +593,7 @@
         \setlength{\tabcolsep}{3pt}
         \renewcommand{\arraystretch}{1.05}
         \begin{table}
-        \caption{So sánh 6 thuật toán trên tập Dev}
+        \caption{Bảng tổng hợp 6 thuật toán trên tập Dev}
         \begin{tabular}{lcccc}
         \toprule
         \textbf{Mô hình} & \textbf{Acc} & \textbf{Recall} & \textbf{F2} & \textbf{MCC} \\
@@ -497,31 +610,36 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{15. Vì sao không chọn Naive Bayes?}
+\begin{frame}{18. Phân tích đồng đều 6 mô hình}
     \begin{columns}[T]
-        \column{0.54\linewidth}
-        \blk{Điểm số thấp hẳn}
-        \begin{itemize}
-            \item Naive Bayes: F2 chỉ \textbf{0.6642}, MCC \textbf{0.3544} — thấp nhất trong sáu mô hình.
-        \end{itemize}
-        \vspace{0.15cm}
-        \blk{Nguyên nhân}
-        \begin{itemize}
-            \item Naive Bayes giả định các biến \textbf{độc lập} với nhau.
-            \item Ở đây quãng đường, địa điểm, giao thông \textbf{liên kết chặt} (đã thấy ở phần phân tích) nên giả định bị vi phạm nặng.
-            \item Vì thế nhóm đã \emph{thử} nhưng \textbf{không chọn} — không phải bỏ qua.
-        \end{itemize}
+        \column{0.62\linewidth}
+        \scriptsize
+        \setlength{\tabcolsep}{2.4pt}
+        \renewcommand{\arraystretch}{1.08}
+        \begin{tabular}{p{2.2cm}p{3.4cm}p{3.4cm}}
+        \toprule
+        \textbf{Mô hình} & \textbf{Điểm mạnh} & \textbf{Hạn chế / lý do không chọn}\\
+        \midrule
+        \textbf{Logistic Regression} & F2/MCC cao nhất, có xác suất, dễ giải thích. & Phù hợp nhất nên được khóa.\\
+        SVM & Accuracy/MCC cao, bắt quan hệ phi tuyến. & Recall/F2 thấp hơn LR, khó giải thích hơn.\\
+        Decision Tree & Dễ đọc thành luật if--else, Recall khá. & Dễ overfit dữ liệu nhỏ, MCC thấp hơn.\\
+        Random Forest & Precision cao, ít báo nhầm. & Recall thấp hơn nên bỏ sót nhiều đơn trễ hơn.\\
+        k-NN & Đơn giản, ít giả định dạng hàm. & Nhạy với khoảng cách sau one-hot, F2 thấp.\\
+        Naive Bayes & Chạy nhanh, Recall khá, làm baseline xác suất. & Giả định độc lập feature bị vi phạm; MCC thấp.\\
+        \bottomrule
+        \end{tabular}
 
-        \column{0.44\linewidth}
-        \centering
-        \footnotesize
-        \blk{Bài học}\par\vspace{4pt}
-        Chọn mô hình phải xét xem \textbf{giả định} của nó có hợp với dữ liệu hay
-        không, chứ không chỉ nhìn điểm số.
+        \column{0.36\linewidth}
+        \blk{Cách đọc công bằng}
+        \begin{itemize}\footnotesize
+            \item Không chỉ hỏi mô hình nào điểm cao nhất, mà hỏi \textbf{mô hình đó có giúp bắt đơn trễ tốt không}.
+            \item Với bài toán này, \textbf{Recall/F2} quan trọng vì bỏ sót đơn trễ tốn kém.
+            \item \textbf{MCC} kiểm tra mô hình có cân bằng cả đúng giờ và trễ, tránh chọn mô hình chỉ giỏi một lớp.
+        \end{itemize}
     \end{columns}
 \end{frame}
 
-\begin{frame}{16. Tinh chỉnh siêu tham số Hồi quy Logistic}
+\begin{frame}{19. Tinh chỉnh siêu tham số Hồi quy Logistic}
     \begin{columns}[T]
         \column{0.41\linewidth}
         \blk{Quy trình tinh chỉnh}
@@ -549,6 +667,8 @@
         F2 CV (Mean $\pm$ Std) & $0.9387 \pm 0.0323$ & $\mathbf{0.9437 \pm 0.0375}$ \\
         F2 Dev (Chỉ số chính) & $\mathbf{0.9434}$ & $0.8894$ \\
         Accuracy Dev & $\mathbf{0.9701}$ & $0.9602$ \\
+        Balanced Accuracy Dev & $\mathbf{0.9636}$ & $0.9310$ \\
+        MCC Dev & $\mathbf{0.9117}$ & $0.8779$ \\
         Precision / Recall Dev & $0.9091$ / $\mathbf{0.9524}$ & $\mathbf{0.9250}$ / $0.8810$ \\
         Ma trận nhầm lẫn & $155 / 4 / 2 / 40$ & $156 / 3 / 5 / 37$ \\
         \midrule
@@ -558,7 +678,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{17. Quét ngưỡng quyết định phân loại}
+\begin{frame}{20. Quét ngưỡng quyết định phân loại}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Quét ngưỡng trên tập kiểm định}
@@ -580,7 +700,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{18. Kiểm thử độ ổn định (100 lần chia tập)}
+\begin{frame}{21. Kiểm thử độ ổn định (100 lần chia tập)}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Mục tiêu}
@@ -602,7 +722,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{19. Kết quả kiểm thử so với baseline}
+\begin{frame}{22. Kết quả kiểm thử so với baseline}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Hồi quy Logistic (kiểm thử)}
@@ -643,7 +763,7 @@
 % PHẦN III — TỪ DỰ ĐOÁN ĐẾN QUYẾT ĐỊNH
 % =====================================================================
 
-\begin{frame}{20. Đối chiếu: Điểm rủi ro DSS vs. Xác suất mô hình}
+\begin{frame}{23. Đối chiếu: Điểm rủi ro DSS vs. Xác suất mô hình}
     \begin{table}
         \centering\footnotesize
         \renewcommand{\arraystretch}{1.2}
@@ -651,7 +771,7 @@
         \toprule
         \textbf{Tiêu chí} & \textbf{Xác suất mô hình ML} & \textbf{Điểm rủi ro DSS (Đề xuất)} \\
         \midrule
-        \blk{Bản chất} & Dự đoán thống kê thuần túy từ dữ liệu lịch sử (hộp đen). & Trộn lẫn dự báo mô hình (55\%) và áp lực vận hành thực tế (45\%). \\
+        \blk{Bản chất} & Một xác suất trễ từ mô hình. & Một điểm tổng hợp: xác suất mô hình (55\%) + áp lực vận hành (45\%). \\
         \blk{Độ giải thích} & Thấp (chỉ đưa ra một con số xác suất trễ chung chung). & Cao (bóc tách rõ đóng góp của cự ly, giao thông, giờ cao điểm, v.v.). \\
         \blk{Tính thích ứng} & Kém (cần thu thập dữ liệu và huấn luyện lại nếu đổi quy trình). & Rất cao (chỉ cần điều chỉnh trọng số cấu hình chính sách vận hành). \\
         \blk{Dẫn dắt hành động} & Khó gán trực tiếp vì thiếu ngữ cảnh và ngưỡng linh hoạt. & Phân nhóm rõ ràng (Thấp/Vừa/Cao) để gán tài xế và đẩy hàng đợi bếp. \\
@@ -660,18 +780,18 @@
     \end{table}
     \vspace{-0.1cm}
     \begin{itemize}
-        \item \textbf{Ý nghĩa cốt lõi:} Điểm rủi ro là công cụ \textbf{hỗ trợ quyết định} mang tính thực tế, giải quyết triệt để vấn đề phản ứng chậm và sự thiếu minh bạch của mô hình AI hộp đen.
+        \item \textbf{Ý nghĩa:} Điểm rủi ro giúp điều phối viên biết đơn nào cần xử lý trước và vì sao đơn đó bị xếp rủi ro cao.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{21. Điểm rủi ro: công thức tính (0--100)}
+\begin{frame}{24. Điểm rủi ro: công thức tính (0--100)}
     \begin{columns}[T]
         \column{0.5\linewidth}
-        \blk{Nguyên tắc thiết kế bộ lọc rủi ro}
+        \blk{Cách nhóm đặt trọng số}
         \begin{itemize}
-            \item \textbf{Mô hình ML là cốt lõi (55\%):} Kế thừa khả năng dự báo từ dữ liệu lịch sử tốt nhất của Logistic Regression.
-            \item \textbf{Tích hợp áp lực (45\%):} Bù đắp các yếu tố động thời gian thực (giao thông, cuối tuần, độ phức tạp đơn).
-            \item \textbf{Tính giải thích cao:} Từng điểm số đều có thể bóc tách rõ ràng nguồn gốc phát sinh để tăng sự tin cậy.
+            \item \textbf{55\% cho mô hình:} xác suất trễ vẫn là tín hiệu chính.
+            \item \textbf{45\% còn lại:} cộng thêm traffic, cự ly, giờ cao điểm, độ phức tạp và cuối tuần.
+            \item Các trọng số cộng bằng 1 và được đặt thủ công để dễ đọc, không phải hệ số học từ mô hình.
         \end{itemize}
 
         \column{0.48\linewidth}
@@ -695,7 +815,29 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{22. Điểm rủi ro: bóc tách thành phần}
+\begin{frame}{24B. Risk Score: các con số lấy từ đâu?}
+    \scriptsize
+    \setlength{\tabcolsep}{2.8pt}
+    \renewcommand{\arraystretch}{1.15}
+    \begin{tabular}{p{2.6cm}p{1.4cm}p{3.5cm}p{5.2cm}}
+    \toprule
+    \textbf{Thành phần} & \textbf{Trọng số} & \textbf{Cách đổi về 0--100} & \textbf{Nguồn con số}\\
+    \midrule
+    Xác suất mô hình & 0,55 & $P(delayed)\times100$ & Lấy trực tiếp từ Logistic Regression đã chọn.\\
+    Giao thông & 0,15 & Low=20, Medium=60, High=100 & Nhóm đặt theo EDA: High trễ 50,3\%, Medium 11,1\%, Low 0,36\%.\\
+    Cự ly & 0,12 & $\min(distance/10\times100,100)$ & 10 km là cự ly lớn nhất trong dữ liệu.\\
+    Giờ cao điểm & 0,08 & Peak=100, non-peak=20 & Biến nhị phân; có ảnh hưởng nhưng thấp hơn traffic/cự ly.\\
+    Độ phức tạp & 0,06 & $\min(complexity/20\times100,100)$ & 20 là mức tối đa: 5 topping $\times$ size XL=4.\\
+    Cuối tuần & 0,04 & Weekend=70, weekday=40 & Tín hiệu yếu hơn nên chỉ cho trọng số nhỏ.\\
+    \bottomrule
+    \end{tabular}
+    \vspace{0.08cm}
+    \begin{itemize}\footnotesize
+        \item Đây là \textbf{quy tắc chấm điểm của nhóm}, dùng để giải thích và xếp hàng đợi; nếu có dữ liệu vận hành thật thì có thể chỉnh lại trọng số.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{25. Điểm rủi ro: bóc tách thành phần}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Vì sao phải bóc tách?}
@@ -717,7 +859,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{23. Hiệu chuẩn điểm rủi ro}
+\begin{frame}{26. Hiệu chuẩn điểm rủi ro}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Điểm rủi ro có ``đúng'' không?}
@@ -740,7 +882,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{24. Độ nhạy của ngưỡng ưu tiên}
+\begin{frame}{27. Độ nhạy của ngưỡng ưu tiên}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Ngưỡng phân nhóm}
@@ -762,7 +904,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{25. Hàng đợi ưu tiên \& hành động}
+\begin{frame}{28. Hàng đợi ưu tiên \& hành động}
     \begin{center}\small Điểm rủi ro được dịch thành hành động cụ thể cho người điều phối:\end{center}
     \vspace{-2pt}
     \begin{table}
@@ -783,7 +925,7 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{26. Xếp tài xế: bài toán phân công}
+\begin{frame}{29. Xếp tài xế: bài toán phân công}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Mô hình hoá}
@@ -811,7 +953,7 @@
 % PHẦN IV — MỞ RỘNG & TRÌNH BÀY
 % =====================================================================
 
-\begin{frame}{27. \mr Phân tích hành vi khách hàng}
+\begin{frame}{30. \mr Phân tích hành vi khách hàng}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Cỡ bánh \& loại bánh}
@@ -830,7 +972,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{28. \mr Phân cụm đơn hàng bằng K-Means}
+\begin{frame}{31. \mr Phân cụm đơn hàng bằng K-Means}
     \begin{columns}[T]
         \column{0.58\linewidth}
         \blk{Thiết lập thuật toán}
@@ -862,7 +1004,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{29. \mr Khai phá luật kết hợp Apriori}
+\begin{frame}{32. \mr Khai phá luật kết hợp Apriori}
     \begin{columns}[T]
         \column{0.58\linewidth}
         \blk{Mối liên kết dẫn đến trễ đơn (delayed=True)}
@@ -893,7 +1035,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{30. \mr Dự báo nhu cầu theo tháng}
+\begin{frame}{33. \mr Dự báo nhu cầu theo tháng}
     \begin{columns}[T]
         \column{0.5\linewidth}
         \blk{Cách làm}
@@ -914,7 +1056,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{31. \mr Xếp ca theo giờ \& xu hướng sở thích}
+\begin{frame}{34. \mr Xếp ca theo giờ \& xu hướng sở thích}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Xếp ca theo giờ}
@@ -936,7 +1078,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{32. Đối chiếu rubric chấm điểm môn học}
+\begin{frame}{35. Đối chiếu rubric chấm điểm môn học}
     \begin{center}\footnotesize Bốn nhóm yêu cầu của phiếu chấm — dự án phủ ở các phần sau:\end{center}
     \vspace{-0.1cm}
     \begin{table}
@@ -959,7 +1101,7 @@
     \begin{center}\tiny\itshape Chi tiết đối chiếu 20 mục: xem Bảng 7.1 trong báo cáo.\end{center}
 \end{frame}
 
-\begin{frame}{33. Bảng điều khiển Streamlit — Tổng quan \& Khám phá}
+\begin{frame}{36. Bảng điều khiển Streamlit — Tổng quan \& Khám phá}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Giao diện tổng quan}
@@ -980,7 +1122,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{34. Bảng điều khiển Streamlit — Điều hành \& Kiểm soát}
+\begin{frame}{37. Bảng điều khiển Streamlit — Điều hành \& Kiểm soát}
     \begin{columns}[T]
         \column{0.45\linewidth}
         \blk{Tính năng cốt lõi}
@@ -997,7 +1139,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{35. Vận hành hệ thống \& Khả năng tái lập}
+\begin{frame}{38. Vận hành hệ thống \& Khả năng tái lập}
     \begin{columns}[T]
         \column{0.52\linewidth}
         \blk{Báo cáo Power BI}
@@ -1027,7 +1169,7 @@
 
 
 
-\begin{frame}{36. Giới hạn \& Lưu ý quan trọng}
+\begin{frame}{39. Giới hạn \& Lưu ý quan trọng}
     \begin{columns}[T]
         \column{0.48\linewidth}
         \blk{Giới hạn kỹ thuật}
@@ -1046,7 +1188,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}{37. Kết luận \& Hướng phát triển}
+\begin{frame}{40. Kết luận \& Hướng phát triển}
     \begin{columns}[T]
         \column{0.48\linewidth}
         \blk{Kết quả đạt được}

@@ -263,15 +263,19 @@ GridSearchCV & Thử toàn bộ lưới siêu tham số bằng cross-validation 
 hình có metric trung bình tốt nhất.\\
 F2 & Chỉ số F-score đặt trọng số Recall cao hơn Precision; phù hợp khi bỏ sót
 đơn trễ là lỗi quan trọng.\\
-MCC & Matthews Correlation Coefficient; chỉ số cân bằng cho bài toán nhị phân
-mất cân bằng.\\
+Balanced Accuracy & Trung bình Recall của hai lớp trễ và đúng giờ; dùng khi dữ
+liệu mất cân bằng để lớp đúng giờ không làm Accuracy bị ảo.\\
+MCC & Matthews Correlation Coefficient; có thể hiểu là độ tương quan giữa nhãn
+thật và nhãn dự đoán. MCC bằng 1 là dự đoán hoàn hảo, 0 gần như đoán mò, -1 là
+dự đoán ngược hoàn toàn. Chỉ số này tính từ cả bốn ô TP, TN, FP, FN nên hữu ích
+khi dữ liệu mất cân bằng.\\
 Data forensics & Phân tích truy ngược dấu vết sinh dữ liệu: công thức tất định,
 lượng tử hóa, tính đồng đều và tín hiệu artifact.\\
 Risk Score & Điểm rủi ro do tầng DSS tính từ xác suất mô hình và các yếu tố
 vận hành.\\
 Priority & Mức ưu tiên Low/Medium/High suy từ Risk Score để sắp xếp hàng đợi.\\
 Assignment & Bài toán gán đơn cho tài xế giả lập theo chi phí nhỏ nhất; trong
-dự án chỉ là kịch bản prescriptive demo.\\
+dự án chỉ là kịch bản minh họa vì chưa có dữ liệu tài xế thật.\\
 \bottomrule
 \end{longtable}
 
@@ -503,6 +507,38 @@ hình dự báo vì chúng chứa trực tiếp hoặc gián tiếp thông tin t
 Feature set chính chỉ dùng biến có thể biết trước khi giao: khoảng cách, số
 topping, giờ đặt, size encoding, nhà hàng, địa điểm, loại pizza, traffic,
 payment category, peak hour, weekend và tháng đặt hàng.
+
+Một câu hỏi dễ nhầm là có thể lấy \code{delivery\_time - delay\_min} để tạo
+feature hay không. Câu trả lời là không dùng cho dự báo: \code{delivery\_time}
+và \code{delay\_min} đều chỉ có sau khi đơn đã giao xong. Nếu trừ số phút
+\code{delay\_min} khỏi \code{delivery\_time}, ta chỉ tạo ra một mốc thời gian
+suy từ tương lai; còn quan hệ phút đúng trong dữ liệu là
+\code{delivery\_duration\_min - delay\_min = estimated\_duration\_min}. Quan hệ
+này được dùng để audit bộ sinh dữ liệu, không dùng làm feature lúc nhận đơn.
+
+\begin{table}[H]
+\centering\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\caption{Vai trò 12 feature trong mô hình compact}
+\begin{tabularx}{\textwidth}{p{3.2cm}p{3.7cm}p{3.4cm}X}
+\toprule
+Feature & Vai trò nghiệp vụ & Cách xử lý & Lý do giữ lại\\
+\midrule
+\code{distance\_km} & Cự ly giao hàng & Chuẩn hóa số & Rủi ro trễ tăng mạnh khi cự ly vượt khoảng 6 km.\\
+\code{toppings\_count} & Tải chuẩn bị bếp & Chuẩn hóa số & Nhiều topping làm đơn phức tạp hơn.\\
+\code{order\_hour} & Giờ đặt đơn & Chuẩn hóa số & Bắt hiệu ứng cao điểm 18h--20h.\\
+\code{pizza\_size\_score} & Cỡ bánh theo thứ bậc & Small=1, Medium=2, Large=3, XL=4 & Giữ quan hệ lớn/nhỏ của size mà không tạo quá nhiều cột.\\
+\code{restaurant\_name} & Chuỗi cửa hàng & One-hot & Giữ tín hiệu brand nếu có, sau đó kiểm tra ablation để tránh diễn giải quá mức.\\
+\code{location} & Khu vực giao & One-hot & Đại diện bối cảnh địa lý/thành phố.\\
+\code{pizza\_type} & Loại bánh & One-hot & Có thể liên quan độ phức tạp chuẩn bị.\\
+\code{traffic\_level} & Mức giao thông & One-hot & Driver rủi ro rõ nhất trong EDA.\\
+\code{payment\_category} & Online/offline & Gộp từ payment method rồi one-hot & Giữ tín hiệu thanh toán ở mức gọn, tránh nhiều nhãn nhỏ.\\
+\code{is\_peak\_hour} & Cờ giờ cao điểm & One-hot & Hỗ trợ giải thích áp lực vận hành.\\
+\code{is\_weekend} & Cờ cuối tuần & One-hot & Tín hiệu phụ về nhu cầu cuối tuần.\\
+\code{order\_month} & Tháng đặt hàng & One-hot & Bắt mùa vụ đơn giản trong dữ liệu nhỏ.\\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \section{Tính chân thực dữ liệu và truy ngược bộ sinh}
 
@@ -844,6 +880,13 @@ Dự án so sánh sáu thuật toán: Logistic Regression, Decision Tree, Gaussi
 Naive Bayes, k-NN, SVM và Random Forest. Feature set compact có 12 feature và
 loại các biến công thức/trùng thông tin.
 
+Vì lớp trễ chỉ chiếm khoảng 20,92\%, báo cáo không dựa vào Accuracy đơn thuần.
+\textbf{Balanced Accuracy} được dùng để lấy trung bình khả năng nhận diện cả
+hai lớp: trễ và đúng giờ. \textbf{MCC} được đọc như độ tương quan giữa nhãn thật
+và nhãn dự đoán; giá trị gần 1 nghĩa là mô hình phân biệt tốt cả hai lớp, còn
+gần 0 nghĩa là không hơn đoán mò nhiều. F2 vẫn là chỉ số chọn mô hình chính vì
+bài toán vận hành ưu tiên không bỏ sót đơn trễ.
+
 \section{So sánh feature set và model}
 
 \begin{table}[H]
@@ -876,12 +919,38 @@ Naive Bayes & 0,6368 & 0,7179 & 0,6642 & 0,3544\\
 \end{tabular}
 \end{table}
 
-Logistic Regression được chọn vì đạt F2 cao nhất trên dev, đồng thời có cấu
-trúc đơn giản và dễ giải thích hơn các mô hình phức tạp trong phạm vi dataset
-nhỏ. Gaussian Naive Bayes vẫn được đưa vào so sánh để có baseline xác suất, nhưng
-giả định feature độc lập không phù hợp với dữ liệu này: nhiều feature là biến
-đổi từ distance/traffic, nên Bayes có Recall khá nhưng Precision thấp, F2 chỉ
-0,6642 và MCC 0,3544.
+\begin{table}[H]
+\centering\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\caption{Phân tích đồng đều sáu mô hình đã thử}
+\begin{tabularx}{\textwidth}{p{2.7cm}X X p{2.4cm}}
+\toprule
+Mô hình & Điểm mạnh & Hạn chế & Kết luận\\
+\midrule
+Logistic Regression & F2 và MCC cao nhất; có xác suất rõ ràng; dễ đưa vào
+dashboard. & Nếu dữ liệu thật có quan hệ quá phức tạp thì mô hình tuyến tính có
+thể kém hơn. & Chọn làm mô hình khóa.\\
+SVM & Accuracy và MCC cao; kernel RBF xử lý được biên phi tuyến. & Recall/F2
+thấp hơn Logistic Regression; khó giải thích và phải hiệu chuẩn xác suất. &
+Không chọn vì mục tiêu ưu tiên bắt trễ.\\
+Decision Tree & Dễ diễn giải thành luật if--else; Recall khá. & Dễ
+overfit trên dữ liệu nhỏ; MCC thấp hơn nhóm đầu. & Dùng để so sánh.\\
+Random Forest & Precision cao, ít báo trễ nhầm. & Recall thấp hơn nên bỏ sót
+nhiều đơn trễ hơn, làm F2 giảm. & Không phù hợp mục tiêu chính.\\
+k-NN & Đơn giản, ít giả định dạng hàm. & Nhạy với khoảng cách sau one-hot;
+Recall và F2 thấp. & Không chọn.\\
+Gaussian Naive Bayes & Chạy nhanh, làm baseline xác suất, Recall khá. & Giả
+định feature độc lập không phù hợp với dữ liệu có nhiều biến liên quan chặt,
+Precision và MCC thấp. & Không chọn nhưng giữ để chứng minh đã thử đủ nhóm mô
+hình.\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Logistic Regression được chọn vì đạt F2 cao nhất trên dev và dễ đưa vào phần
+chấm điểm rủi ro. Lý do chính không chỉ là điểm số, mà là mục tiêu nghiệp vụ:
+bắt được nhiều đơn trễ, không tạo quá nhiều cảnh báo nhầm và vẫn có xác suất để
+xếp hàng đợi.
 
 \section{Dò siêu tham số sau khi chọn model}
 
@@ -915,7 +984,7 @@ Tuned LR & 0,3 & 0,9437 & 0,8894 & 0,8779 & Không dùng\\
 Ngoài việc chọn model theo F2, dự án kiểm tra riêng bước chọn ngưỡng xác suất.
 Ngưỡng 0,5 là mặc định kỹ thuật của classifier; nếu mục tiêu vận hành ưu tiên
 Recall mạnh hơn, có thể hạ ngưỡng. Việc quét ngưỡng chỉ dùng dev, không dùng
-test để chọn policy.
+test để chọn quy tắc.
 
 \begin{table}[H]
 \centering
@@ -939,8 +1008,8 @@ F3 & 0,1569 & 0,7778 & 1,0000 & 0,9722 & 12 & 0\\
 
 Khi chuyển ngưỡng F2 tối ưu từ dev sang test, Recall đạt 1,0 và không còn FN,
 nhưng FP tăng từ 7 lên 22; F2 test giảm từ 0,9491 xuống 0,9052. Do đó báo cáo
-chính giữ ngưỡng 0,5 cho metric test, còn dashboard coi threshold là policy có
-thể chỉnh nếu quản lý muốn đánh đổi thêm FP để giảm FN.
+chính giữ ngưỡng 0,5 cho metric test, còn dashboard coi ngưỡng là tham số có
+thể chỉnh nếu quản lý muốn chấp nhận thêm báo nhầm để giảm bỏ sót đơn trễ.
 
 \begin{table}[H]
 \centering
@@ -1085,7 +1154,7 @@ Risk =&\ 0,55S_{model} + 0,15S_{traffic} + 0,12S_{distance}\\
 Thành phần & Weight & Công thức điểm 0--100 & Lý do\\
 \midrule
 \(S_{model}\) & 0,55 & \(P(delayed)\times100\) & Tín hiệu học máy là bằng chứng chính.\\
-\(S_{traffic}\) & 0,15 & Low=20, Medium=60, High=100 & Traffic là driver vận hành rõ trong EDA.\\
+\(S_{traffic}\) & 0,15 & Low=20, Medium=60, High=100 & Traffic liên quan mạnh tới trễ trong EDA.\\
 \(S_{distance}\) & 0,12 & \(\min(distance/10\times100,100)\) & 10 km là mức xa nhất trong dữ liệu.\\
 \(S_{peak}\) & 0,08 & Peak=100, non-peak=20 & Giờ cao điểm ảnh hưởng năng lực xử lý.\\
 \(S_{complexity}\) & 0,06 & \(\min(complexity/20\times100,100)\) & Complexity tối đa quan sát là 20.\\
@@ -1094,10 +1163,20 @@ Thành phần & Weight & Công thức điểm 0--100 & Lý do\\
 \end{tabularx}
 \end{table}
 
-Các trọng số cộng đúng 1,0 và được chọn như một policy minh bạch: mô hình chiếm
-vai trò chính, còn traffic/distance/peak/complexity/weekend là áp lực vận hành
-để người điều phối hiểu vì sao một đơn được đẩy lên hàng đợi. Đây không phải
-trọng số tối ưu thống kê; nếu cửa hàng đổi năng lực xử lý, policy có thể chỉnh.
+Các trọng số cộng đúng 1,0 và là quy tắc nhóm tự đặt cho tầng DSS. Mô hình
+chiếm hơn một nửa điểm vì đây là tín hiệu dự báo chính. Traffic và distance
+đứng sau vì EDA cho thấy hai yếu tố này liên quan rõ tới trễ. Peak hour,
+complexity và weekend có trọng số nhỏ hơn vì vai trò yếu hơn trong dữ liệu.
+Đây không phải hệ số học ra từ mô hình và cũng không phải tối ưu thống kê; nếu
+có dữ liệu vận hành thật, nhóm có thể chỉnh lại các trọng số này.
+
+Nguồn các con số cụ thể như sau: \(0,55\) là phần nhóm dành cho xác suất mô
+hình; \(0,15\) và \(0,12\) dành cho traffic và cự ly vì hai yếu tố này nổi bật
+nhất trong EDA; \(0,08\), \(0,06\), \(0,04\) dành cho peak hour, complexity và
+weekend vì là tín hiệu phụ. Mốc 10 km là cự ly lớn nhất trong dữ liệu. Mốc 20
+của complexity đến từ công thức \(5\) topping tối đa nhân với size score XL
+bằng 4. Thang traffic Low=20, Medium=60, High=100 là thang do nhóm đặt theo
+thứ tự rủi ro quan sát được: High có tỷ lệ trễ cao hơn Medium và Low rất rõ.
 
 \begin{figure}[H]
 \centering
@@ -1142,8 +1221,8 @@ Recommended Action tương ứng:
 \end{figure}
 
 Calibration cho thấy delay rate tăng từ Low 0,0\% sang Medium 7,3\% và High
-88,6\%. Ngưỡng 35/65 được giữ như policy khóa vì bắt được 92,9\% đơn trễ trong
-nhóm High, nhưng sensitivity chứng minh đây là tham số vận hành, không phải
+88,6\%. Ngưỡng 35/65 được giữ làm quy tắc chính vì bắt được 92,9\% đơn trễ trong
+nhóm High, nhưng phần kiểm tra độ nhạy cho thấy đây là tham số vận hành, không phải
 chân lý tuyệt đối.
 
 \section{Kịch bản phân công tài xế}
@@ -1151,7 +1230,7 @@ chân lý tuyệt đối.
 Dự án lấy nhóm đơn High priority từ queue, tạo fleet tài xế giả lập có capacity
 và tối thiểu hóa chi phí gán đơn--tài xế. Kết quả hiện tại gán 12 đơn High
 priority cho 6 tài xế giả lập, mean assignment cost 32,84. Đây là minh họa tầng
-prescriptive DSS vì dataset Kaggle không có depot, driver logs hoặc capacity
+gợi ý quyết định vì dataset Kaggle không có depot, log tài xế hoặc sức chứa
 thật.
 
 \begin{table}[H]
@@ -1293,9 +1372,8 @@ chính.\\
 đối ổn định, nhưng vẫn được giải thích bằng data synthetic/generator gần tất
 định, không overclaim production.\\
 Risk Score và assignment có tối ưu thống kê không? &
-Không. Risk Score là weighted scoring policy minh bạch; assignment dùng cost
-proxy và fleet giả lập. Hai phần này là prototype prescriptive DSS, cần SLA,
-driver log và cost thật nếu triển khai.\\
+Không. Risk Score là quy tắc chấm điểm do nhóm đặt; assignment dùng chi phí và
+đội tài xế giả lập. Nếu triển khai thật cần SLA, log tài xế và chi phí thật.\\
 Forecast/recommendation dùng được kinh doanh thật không? &
 Không claim. Forecast MAPE 45,7\% và recommendation là popularity/context rule,
 chỉ minh họa quy trình planning và reporting trên dữ liệu synthetic.\\
