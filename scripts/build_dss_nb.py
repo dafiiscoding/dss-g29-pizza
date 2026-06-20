@@ -106,6 +106,11 @@ def build():
             **Vì sao bước này?**
             - Làm gì: Liệt kê từng thành phần của Risk Score, công thức chuẩn hóa về 0-100, trọng số và lý do chọn.
             - Vì sao: Risk Score là policy DSS do nhóm thiết kế, không phải tham số học tự động. Nếu không có bảng này, người xem chỉ thấy một con số 0-100 nhưng không biết nó đến từ đâu.
+            - **Tại sao đã có mô hình ML dự đoán trễ rồi mà vẫn cần Risk Score kết hợp các yếu tố khác?**
+              1. *Phân tách giữa Dự báo và Quyết định (Forecasting vs Decision Support):* Xác suất mô hình ($P(tr\\text{ễ})$) chỉ là chỉ số tĩnh dựa trên dữ liệu lịch sử. Risk Score của DSS là chỉ số vận hành thực tế: hai đơn hàng có cùng xác suất trễ 70% nhưng đơn hàng rơi vào giờ cao điểm cuối tuần cần được chấm điểm rủi ro cao hơn để ưu tiên gán trước vì nguy cơ nghẽn hệ thống dây chuyền lớn hơn.
+              2. *Chống rò rỉ dữ liệu (Data Leakage) và giữ mô hình ổn định:* Để tránh leakage và đảm bảo mô hình có thể chạy được ngay khi vừa tiếp nhận đơn hàng, mô hình ML chỉ học các đặc trưng tĩnh đầu vào. Các yếu tố trạng thái động như tình hình kẹt xe thực tế hay độ ùn ứ ở bếp nếu nhét vào mô hình ML tĩnh rất dễ gây hiện tượng quá khớp (overfitting). Tách biệt các yếu tố này sang công thức Risk Score của DSS giúp bảo vệ sự tinh gọn của mô hình học máy.
+              3. *Tăng tính giải thích được (Explainability - XAI):* Nếu chỉ hiển thị xác suất trễ 85% từ mô hình \"hộp đen\", điều phối viên sẽ rất bối rối. Việc bóc tách cụ thể điểm rủi ro (do cự ly xa đóng góp 12 điểm, kẹt xe đóng góp 15 điểm) giúp người vận hành hiểu rõ nguồn gốc phát sinh để đưa ra hành động can thiệp phù hợp.
+              4. *Tính linh hoạt thích ứng tức thời (Ops Flexibility):* Khi năng lực vận hành thay đổi (ví dụ: bổ sung thêm nhân lực bếp), ảnh hưởng của độ phức tạp đơn hàng giảm đi. Nếu chỉ dùng mô hình ML, ta bắt buộc phải thu thập dữ liệu mới và huấn luyện lại mô hình (retrain) rất tốn kém. Với DSS, ta chỉ cần chỉnh cấu hình trọng số chính sách trong `config.py` là hệ thống lập tức cập nhật thích nghi.
             - Kỹ thuật: Weighted scoring model, normalization về cùng thang 0-100.
             - Bằng chứng dẫn tới: `reports/metrics/risk_component_policy_spec.csv` là artifact chuẩn; tổng weight = 1.0 và `risk_component_breakdown.csv` cho thấy contribution cộng lại đúng bằng score.
             """

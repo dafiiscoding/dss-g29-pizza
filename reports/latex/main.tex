@@ -1163,20 +1163,16 @@ Thành phần & Weight & Công thức điểm 0--100 & Lý do\\
 \end{tabularx}
 \end{table}
 
-Các trọng số cộng đúng 1,0 và là quy tắc nhóm tự đặt cho tầng DSS. Mô hình
-chiếm hơn một nửa điểm vì đây là tín hiệu dự báo chính. Traffic và distance
-đứng sau vì EDA cho thấy hai yếu tố này liên quan rõ tới trễ. Peak hour,
-complexity và weekend có trọng số nhỏ hơn vì vai trò yếu hơn trong dữ liệu.
-Đây không phải hệ số học ra từ mô hình và cũng không phải tối ưu thống kê; nếu
-có dữ liệu vận hành thật, nhóm có thể chỉnh lại các trọng số này.
+Các trọng số cộng đúng 1,0 và là quy tắc chính sách vận hành (scoring policy) do nhóm thiết kế cho tầng DSS, không phải các hệ số tối ưu hóa thống kê được học tự động từ mô hình học máy. Việc sử dụng Điểm rủi ro (Risk Score) kết hợp các yếu tố áp lực vận hành thực tế thay vì chỉ sử dụng đơn lẻ xác suất dự báo trễ của mô hình ML xuất phát từ bốn nguyên lý cốt lõi trong thiết kế Hệ hỗ trợ quyết định (DSS):
 
-Nguồn các con số cụ thể như sau: \(0,55\) là phần nhóm dành cho xác suất mô
-hình; \(0,15\) và \(0,12\) dành cho traffic và cự ly vì hai yếu tố này nổi bật
-nhất trong EDA; \(0,08\), \(0,06\), \(0,04\) dành cho peak hour, complexity và
-weekend vì là tín hiệu phụ. Mốc 10 km là cự ly lớn nhất trong dữ liệu. Mốc 20
-của complexity đến từ công thức \(5\) topping tối đa nhân với size score XL
-bằng 4. Thang traffic Low=20, Medium=60, High=100 là thang do nhóm đặt theo
-thứ tự rủi ro quan sát được: High có tỷ lệ trễ cao hơn Medium và Low rất rõ.
+\begin{enumerate}
+    \item \textbf{Phân tách giữa Dự báo thống kê và Quyết định vận hành:} Xác suất của mô hình ($S_{model}$) chỉ trả lời câu hỏi tĩnh: \emph{``Khả năng đơn hàng này bị trễ trên thực tế dựa trên dữ liệu lịch sử là bao nhiêu?''} Trong khi đó, Điểm rủi ro (Risk Score) trả lời câu hỏi nghiệp vụ: \emph{``Mức độ cấp thiết cần can thiệp vận hành của đơn hàng này dưới góc độ quản lý là bao nhiêu?''} Hai đơn hàng có cùng xác suất trễ là 70\% nhưng một đơn diễn ra vào giờ cao điểm cuối tuần ($S_{peak}$, $S_{weekend}$ tăng) cần được chấm điểm rủi ro cao hơn để ưu tiên phân phối trước, vì sự cố trễ đơn lúc này sẽ tạo phản ứng dây chuyền làm nghẽn toàn bộ hệ thống của cửa hàng.
+    \item \textbf{Bảo vệ tính ổn định và chống rò rỉ dữ liệu của mô hình ML:} Để tránh lỗi rò rỉ thông tin (data leakage) và đảm bảo mô hình có thể chạy được ngay khi tiếp nhận đơn hàng, mô hình ML chỉ học các đặc trưng tĩnh. Các yếu tố mang tính động và thay đổi liên tục theo thời gian thực như áp lực giao thông hay độ tích lũy đơn hàng ở bếp nếu đưa vào mô hình học máy rất dễ gây hiện tượng quá khớp (overfitting). Tách biệt các áp lực vận hành này ra tầng DSS và trộn vào công thức Risk Score giúp giữ cho mô hình ML tinh gọn, ổn định, đồng thời tích hợp linh hoạt thông tin vận hành thực tế.
+    \item \textbf{Tăng tính giải thích được (Explainability - XAI) và độ tin cậy:} Một mô hình ML hoạt động như một ``hộp đen'' đối với người điều phối. Nếu hệ thống chỉ hiển thị con số xác suất trễ chung chung, người điều phối sẽ rất khó đưa ra hành động cụ thể. Việc bóc tách Điểm rủi ro thành các thành phần cụ thể (như cự ly xa đóng góp 12 điểm, kẹt xe đóng góp 15 điểm) giúp người điều phối hiểu rõ \emph{tại sao} đơn hàng bị chấm điểm cao, từ đó đưa ra quyết định can thiệp phù hợp (chỉ định tài xế quen đường tắt hoặc báo bếp nướng bánh trước).
+    \item \textbf{Tính linh hoạt và khả năng ứng phó tức thời:} Khi năng lực vận hành của cửa hàng thay đổi (ví dụ: bổ sung nhân viên bếp hoặc tuyển thêm tài xế), tác động của các yếu tố gây trễ sẽ thay đổi. Nếu chỉ dùng mô hình ML, ta bắt buộc phải thu thập dữ liệu mới và huấn luyện lại mô hình (retrain) vốn rất tốn kém thời gian và chi phí MLOps. Với tầng DSS, người quản lý chỉ cần điều chỉnh các trọng số chính sách trong file cấu hình \code{config.py} để hệ thống lập tức thích ứng với chính sách mới.
+\end{enumerate}
+
+Nguồn các con số cụ thể như sau: \(0,55\) là phần dành cho xác suất mô hình (chiếm vai trò dẫn dắt chính); \(0,15\) và \(0,12\) dành cho giao thông và cự ly vì hai yếu tố này nổi bật nhất trong EDA; \(0,08\), \(0,06\), \(0,04\) lần lượt dành cho peak hour, complexity và weekend đóng vai trò các tín hiệu phụ. Mốc cự ly 10 km là khoảng cách tối đa quan sát được trong dữ liệu. Mốc complexity bằng 20 tương ứng với đơn hàng có 5 toppings tối đa nhân với size score của bánh XL bằng 4. Thang điểm giao thông Low=20, Medium=60, High=100 phản ánh mức độ rủi ro tăng dần của mật độ đường xá.
 
 \begin{figure}[H]
 \centering
